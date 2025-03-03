@@ -14,6 +14,13 @@
 		56CBE4D32D764D010086D111 /* nurse_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4D22D764D010086D111 /* nurse_appTests.swift */; };
 		56CBE4DD2D764D020086D111 /* nurse_appUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4DC2D764D020086D111 /* nurse_appUITests.swift */; };
 		56CBE4DF2D764D020086D111 /* nurse_appUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4DE2D764D020086D111 /* nurse_appUITestsLaunchTests.swift */; };
+		56CBE4F02D76528F0086D111 /* PatientMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4EF2D76528F0086D111 /* PatientMenuView.swift */; };
+		56CBE4F22D76551D0086D111 /* PatientStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4F12D76551D0086D111 /* PatientStatusView.swift */; };
+		56CBE4F42D7655280086D111 /* PatientSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4F32D7655280086D111 /* PatientSummaryView.swift */; };
+		56CBE4F62D7655C10086D111 /* PatientHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4F52D7655C10086D111 /* PatientHomeView.swift */; };
+		56CBE4F92D76561F0086D111 /* PatientPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4F82D76561F0086D111 /* PatientPreview.swift */; };
+		56CBE4FB2D7656860086D111 /* Patient Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4FA2D7656860086D111 /* Patient Models.swift */; };
+		56CBE4FD2D76576B0086D111 /* PatientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4FC2D76576B0086D111 /* PatientManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +51,13 @@
 		56CBE4D82D764D020086D111 /* nurse-appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "nurse-appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56CBE4DC2D764D020086D111 /* nurse_appUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nurse_appUITests.swift; sourceTree = "<group>"; };
 		56CBE4DE2D764D020086D111 /* nurse_appUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nurse_appUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		56CBE4EF2D76528F0086D111 /* PatientMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientMenuView.swift; sourceTree = "<group>"; };
+		56CBE4F12D76551D0086D111 /* PatientStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientStatusView.swift; sourceTree = "<group>"; };
+		56CBE4F32D7655280086D111 /* PatientSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientSummaryView.swift; sourceTree = "<group>"; };
+		56CBE4F52D7655C10086D111 /* PatientHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientHomeView.swift; sourceTree = "<group>"; };
+		56CBE4F82D76561F0086D111 /* PatientPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientPreview.swift; sourceTree = "<group>"; };
+		56CBE4FA2D7656860086D111 /* Patient Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient Models.swift"; sourceTree = "<group>"; };
+		56CBE4FC2D76576B0086D111 /* PatientManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				56CBE4C02D764CFF0086D111 /* nurse-app */,
+				56CBE4C52D764D010086D111 /* Assets.xcassets */,
 				56CBE4D12D764D010086D111 /* nurse-appTests */,
 				56CBE4DB2D764D020086D111 /* nurse-appUITests */,
 				56CBE4BF2D764CFF0086D111 /* Products */,
@@ -95,8 +110,9 @@
 			isa = PBXGroup;
 			children = (
 				56CBE4C12D764CFF0086D111 /* nurse_appApp.swift */,
-				56CBE4C32D764CFF0086D111 /* ContentView.swift */,
-				56CBE4C52D764D010086D111 /* Assets.xcassets */,
+				56CBE4ED2D7650BB0086D111 /* Models */,
+				56CBE4EC2D7650B10086D111 /* View Models */,
+				56CBE4EB2D7650A80086D111 /* Views */,
 				56CBE4C72D764D010086D111 /* Preview Content */,
 			);
 			path = "nurse-app";
@@ -125,6 +141,51 @@
 				56CBE4DE2D764D020086D111 /* nurse_appUITestsLaunchTests.swift */,
 			);
 			path = "nurse-appUITests";
+			sourceTree = "<group>";
+		};
+		56CBE4EB2D7650A80086D111 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				56CBE4C32D764CFF0086D111 /* ContentView.swift */,
+				56CBE4F72D7655FF0086D111 /* Patient List View */,
+				56CBE4EE2D7652420086D111 /* Patient Detail Views */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		56CBE4EC2D7650B10086D111 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				56CBE4FC2D76576B0086D111 /* PatientManager.swift */,
+			);
+			path = "View Models";
+			sourceTree = "<group>";
+		};
+		56CBE4ED2D7650BB0086D111 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				56CBE4FA2D7656860086D111 /* Patient Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		56CBE4EE2D7652420086D111 /* Patient Detail Views */ = {
+			isa = PBXGroup;
+			children = (
+				56CBE4EF2D76528F0086D111 /* PatientMenuView.swift */,
+				56CBE4F52D7655C10086D111 /* PatientHomeView.swift */,
+				56CBE4F12D76551D0086D111 /* PatientStatusView.swift */,
+				56CBE4F32D7655280086D111 /* PatientSummaryView.swift */,
+			);
+			path = "Patient Detail Views";
+			sourceTree = "<group>";
+		};
+		56CBE4F72D7655FF0086D111 /* Patient List View */ = {
+			isa = PBXGroup;
+			children = (
+				56CBE4F82D76561F0086D111 /* PatientPreview.swift */,
+			);
+			path = "Patient List View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,7 +318,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56CBE4FD2D76576B0086D111 /* PatientManager.swift in Sources */,
+				56CBE4FB2D7656860086D111 /* Patient Models.swift in Sources */,
+				56CBE4F92D76561F0086D111 /* PatientPreview.swift in Sources */,
+				56CBE4F42D7655280086D111 /* PatientSummaryView.swift in Sources */,
+				56CBE4F62D7655C10086D111 /* PatientHomeView.swift in Sources */,
+				56CBE4F02D76528F0086D111 /* PatientMenuView.swift in Sources */,
 				56CBE4C42D764CFF0086D111 /* ContentView.swift in Sources */,
+				56CBE4F22D76551D0086D111 /* PatientStatusView.swift in Sources */,
 				56CBE4C22D764CFF0086D111 /* nurse_appApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
