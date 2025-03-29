@@ -21,6 +21,7 @@
 		56CBE4F92D76561F0086D111 /* PatientPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4F82D76561F0086D111 /* PatientPreview.swift */; };
 		56CBE4FB2D7656860086D111 /* Patient Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4FA2D7656860086D111 /* Patient Models.swift */; };
 		56CBE4FD2D76576B0086D111 /* PatientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4FC2D76576B0086D111 /* PatientManager.swift */; };
+		CC2105792D98A117004B1D2C /* Sample.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2105782D98A113004B1D2C /* Sample.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		56CBE4F82D76561F0086D111 /* PatientPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientPreview.swift; sourceTree = "<group>"; };
 		56CBE4FA2D7656860086D111 /* Patient Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient Models.swift"; sourceTree = "<group>"; };
 		56CBE4FC2D76576B0086D111 /* PatientManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientManager.swift; sourceTree = "<group>"; };
+		CC2105782D98A113004B1D2C /* Sample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -169,6 +171,7 @@
 		56CBE4ED2D7650BB0086D111 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CC2105782D98A113004B1D2C /* Sample.swift */,
 				56CBE4FA2D7656860086D111 /* Patient Models.swift */,
 			);
 			path = Models;
@@ -334,6 +337,7 @@
 				56CBE4F02D76528F0086D111 /* PatientMenuView.swift in Sources */,
 				56CBE4C42D764CFF0086D111 /* ContentView.swift in Sources */,
 				56CBE4F22D76551D0086D111 /* PatientStatusView.swift in Sources */,
+				CC2105792D98A117004B1D2C /* Sample.swift in Sources */,
 				56CBE4C22D764CFF0086D111 /* nurse_appApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
