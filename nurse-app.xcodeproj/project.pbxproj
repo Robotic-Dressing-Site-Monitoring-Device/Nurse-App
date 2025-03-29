@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -59,6 +59,10 @@
 		56CBE4FA2D7656860086D111 /* Patient Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient Models.swift"; sourceTree = "<group>"; };
 		56CBE4FC2D76576B0086D111 /* PatientManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		CC1F83E22D7681540059DCE5 /* NotificationDetailView */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NotificationDetailView; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		56CBE4BB2D764CFF0086D111 /* Frameworks */ = {
@@ -146,6 +150,7 @@
 		56CBE4EB2D7650A80086D111 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CC1F83E22D7681540059DCE5 /* NotificationDetailView */,
 				56CBE4C32D764CFF0086D111 /* ContentView.swift */,
 				56CBE4F72D7655FF0086D111 /* Patient List View */,
 				56CBE4EE2D7652420086D111 /* Patient Detail Views */,
@@ -202,6 +207,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CC1F83E22D7681540059DCE5 /* NotificationDetailView */,
 			);
 			name = "nurse-app";
 			productName = "nurse-app";
