@@ -11,14 +11,13 @@ import SwiftUI
 
 struct PatientMenuView: View {
     @EnvironmentObject var manager: PatientManager
-    @State var patient: Patient
     var body: some View {
         NavigationStack {
             ZStack {
                 TabView {
                     // View 1
                     NavigationView {
-                        PatientHomeView(patient: patient)
+                        PatientHomeView()
                     }
                     .tabItem {
                         Label("HomeView", systemImage: "house")
@@ -49,6 +48,6 @@ struct PatientMenuView: View {
 }
 
 #Preview {
-    PatientMenuView(patient: Patient(id: 1, firstName: "john", lastName: "doe", location: "room 406"))
+    PatientMenuView()
         .environmentObject(PatientManager())
 }

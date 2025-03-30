@@ -20,16 +20,24 @@ struct ContentView: View {
             List {
                 ForEach(patientManager.patientList) { patient in
                     VStack {
-                        NavigationLink(destination: PatientMenuView(patient: patient)) {
-                            PatientPreview(patient: patient)
+                        NavigationLink(destination: PatientMenuView()
+                            .onAppear {
+                                patientManager.setPatient(patient: patient)
+                            }) {
+                                PatientPreview(patient: patient)
                         }
-                        
+                            
                     }
+                    .listRowBackground(patientManager.colorForStatus(patient.status.dressingStatus))
+                    .padding()
+                    
                 }
+                
             }
         }
     }
 }
+
 
 #Preview {
     ContentView()

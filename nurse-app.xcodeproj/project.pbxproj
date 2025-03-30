@@ -21,6 +21,8 @@
 		56CBE4F92D76561F0086D111 /* PatientPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4F82D76561F0086D111 /* PatientPreview.swift */; };
 		56CBE4FB2D7656860086D111 /* Patient Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4FA2D7656860086D111 /* Patient Models.swift */; };
 		56CBE4FD2D76576B0086D111 /* PatientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CBE4FC2D76576B0086D111 /* PatientManager.swift */; };
+		56CE1AA52D99CBF1007B0227 /* Sample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CE1AA42D99CBF1007B0227 /* Sample.swift */; };
+		56CE1AA82D99CC55007B0227 /* NotificationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CE1AA72D99CC55007B0227 /* NotificationDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,8 @@
 		56CBE4F82D76561F0086D111 /* PatientPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientPreview.swift; sourceTree = "<group>"; };
 		56CBE4FA2D7656860086D111 /* Patient Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient Models.swift"; sourceTree = "<group>"; };
 		56CBE4FC2D76576B0086D111 /* PatientManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientManager.swift; sourceTree = "<group>"; };
+		56CE1AA42D99CBF1007B0227 /* Sample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
+		56CE1AA72D99CC55007B0227 /* NotificationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				56CBE4C32D764CFF0086D111 /* ContentView.swift */,
+				56CE1AA62D99CC37007B0227 /* NotificationDetailView */,
 				56CBE4F72D7655FF0086D111 /* Patient List View */,
 				56CBE4EE2D7652420086D111 /* Patient Detail Views */,
 			);
@@ -165,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				56CBE4FA2D7656860086D111 /* Patient Models.swift */,
+				56CE1AA42D99CBF1007B0227 /* Sample.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -186,6 +192,14 @@
 				56CBE4F82D76561F0086D111 /* PatientPreview.swift */,
 			);
 			path = "Patient List View";
+			sourceTree = "<group>";
+		};
+		56CE1AA62D99CC37007B0227 /* NotificationDetailView */ = {
+			isa = PBXGroup;
+			children = (
+				56CE1AA72D99CC55007B0227 /* NotificationDetailView.swift */,
+			);
+			path = NotificationDetailView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,8 +335,10 @@
 				56CBE4FD2D76576B0086D111 /* PatientManager.swift in Sources */,
 				56CBE4FB2D7656860086D111 /* Patient Models.swift in Sources */,
 				56CBE4F92D76561F0086D111 /* PatientPreview.swift in Sources */,
+				56CE1AA82D99CC55007B0227 /* NotificationDetailView.swift in Sources */,
 				56CBE4F42D7655280086D111 /* PatientSummaryView.swift in Sources */,
 				56CBE4F62D7655C10086D111 /* PatientHomeView.swift in Sources */,
+				56CE1AA52D99CBF1007B0227 /* Sample.swift in Sources */,
 				56CBE4F02D76528F0086D111 /* PatientMenuView.swift in Sources */,
 				56CBE4C42D764CFF0086D111 /* ContentView.swift in Sources */,
 				56CBE4F22D76551D0086D111 /* PatientStatusView.swift in Sources */,

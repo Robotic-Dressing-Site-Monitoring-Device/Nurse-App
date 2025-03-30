@@ -11,11 +11,19 @@ struct PatientPreview: View {
     @EnvironmentObject var manager: PatientManager
     @State var patient: Patient
     var body: some View {
-        Text("Patient \(patient.id) Preview")
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Name: \(patient.firstName) \(patient.lastName)")
+                .font(.headline)
+            Text("Location: \(patient.location)")
+                .font(.subheadline)
+            Text("Patient ID: \(patient.id)")
+                .font(.subheadline)
+        }
+        
     }
 }
 
 #Preview {
-    PatientPreview(patient: Patient(id: 1, firstName: "john", lastName: "doe", location: "room 406"))
+    PatientPreview(patient: SampleData.samplePatient)
         .environmentObject(PatientManager())
 }
