@@ -1,0 +1,41 @@
+# === Xcode build and user files ===
+DerivedData/
+build/
+*.xcworkspace/xcuserdata/
+*.xcuserstate
+*.xcuserdata/
+*.moved-aside
+*.xcuserdatad/
+
+# === Xcode temporary files ===
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.pbxuser
+
+# === SwiftPM ===
+.build/
+Packages/
+Package.resolved
+
+# === CocoaPods (if used) ===
+Pods/
+
+# === Carthage (if used) ===
+Carthage/Build/
+
+# === Fastlane (if used) ===
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# === Archives ===
+*.xcarchive
+
+# === Playgrounds ===
+timeline.xctimeline
+playground.xcworkspace
+
+# === Xcode automatic backups ===
+*.xcscmblueprint
