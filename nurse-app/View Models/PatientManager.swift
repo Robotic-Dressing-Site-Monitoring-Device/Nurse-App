@@ -10,7 +10,7 @@ import SwiftUI
 
 class PatientManager: ObservableObject {
     @Published var patientList: [Patient] = []
-    @Published var currentPatient: Patient?
+    @Published var currentPatient: Binding<Patient>?
 
     init() {
         // Initializing Test patients
@@ -38,7 +38,7 @@ class PatientManager: ObservableObject {
             
             let photo = Photo(
                 id: i,
-                patienID: i,
+                patientID: i,
                 time: Date(),
                 image: UIImage(systemName: "person.fill") ?? UIImage()
             )
@@ -57,7 +57,7 @@ class PatientManager: ObservableObject {
         }
     }
     
-    func setPatient(patient: Patient) {
+    func setPatient(patient: Binding<Patient>) {
         self.currentPatient = patient
         print("Current patient is \(patient.id)")
     }
@@ -89,9 +89,11 @@ class PatientManager: ObservableObject {
     }
     
     func recordNotes(notes: String) {
-        if var patient = currentPatient {
-            patient.description = notes
-            
+         if let currPatient = currentPatient {
+            if let patientIndex = patientList.firstIndex(where: {$0.id == currPatient.id}) {
+                patientList[patientIndex].description = notes
+            }
         }
+         
     }
 }

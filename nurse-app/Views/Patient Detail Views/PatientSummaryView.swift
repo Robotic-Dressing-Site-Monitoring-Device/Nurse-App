@@ -9,9 +9,9 @@ import SwiftUI
 
 struct PatientSummaryView: View {
     @EnvironmentObject var patientManager: PatientManager
-    
+    @Binding var patient: Patient
     var body: some View {
-        if let patient = patientManager.currentPatient {
+        //if let patient = patientManager.currentPatient {
             ScrollView {
                 VStack {
                     HStack {
@@ -45,15 +45,17 @@ struct PatientSummaryView: View {
                 
             }
             .ignoresSafeArea(edges: .horizontal)
-        }
+        /*
+         }
         else {
             Text("No patient selected")
         }
+         */
         
     }
 }
 
 #Preview {
-    PatientSummaryView()
+    PatientSummaryView(patient: SampleData.samplePatient)
         .environmentObject(SampleData.sampleManager())
 }

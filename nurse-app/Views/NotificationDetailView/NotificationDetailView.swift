@@ -9,11 +9,11 @@ import SwiftUI
 
 struct NotificationDetailView: View {
     @EnvironmentObject var manager: PatientManager
-    @State var patient: Patient
+    @Binding var patient: Patient
     var body: some View {
         NavigationStack {
             VStack (){
-                NavigationLink(destination: PatientPreview(patient: patient)) {
+                NavigationLink(destination: PatientPreview(patient: $patient)) {
                     Text("Patient Preview")
                         .padding()
                         .frame(maxWidth: .infinity)
@@ -35,8 +35,8 @@ struct NotificationDetailView: View {
 
 
 
-/*#Preview {
-     NotificationDetailView(patient: SampleData.samplePatient)))
+#Preview {
+     NotificationDetailView(patient: SampleData.samplePatient)
         .environmentObject(SampleData.sampleManager())
-}*/
+}
 

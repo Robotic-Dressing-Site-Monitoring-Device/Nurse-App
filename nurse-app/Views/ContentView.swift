@@ -18,13 +18,13 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(patientManager.patientList) { patient in
+                ForEach($patientManager.patientList) { $patient in
                     VStack {
-                        NavigationLink(destination: PatientMenuView()
+                        NavigationLink(destination: PatientMenuView(patient: $patient)
                             .onAppear {
-                                patientManager.setPatient(patient: patient)
+                                patientManager.setPatient(patient: $patient)
                             }) {
-                                PatientPreview(patient: patient)
+                                PatientPreview(patient: $patient)
                         }
                             
                     }
@@ -34,6 +34,9 @@ struct ContentView: View {
                 }
                 
             }
+        }
+        .onAppear {
+            patientManager.currentPatient = nil
         }
     }
 }

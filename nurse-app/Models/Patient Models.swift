@@ -32,7 +32,7 @@ struct Patient: Identifiable {
 
 struct Photo: Identifiable{
     let id: Int
-    let patienID: Int
+    let patientID: Int
     let time: Date
     let image: UIImage
 }

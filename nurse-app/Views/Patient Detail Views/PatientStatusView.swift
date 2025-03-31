@@ -10,11 +10,12 @@ import SwiftUI
 
 struct PatientStatusView: View {
     @EnvironmentObject var patientManager: PatientManager
+    @Binding var patient: Patient
     @State var nurseNotes: String = ""
     @State private var editingNotes: Bool = false
     
     var body: some View {
-        if let patient = patientManager.currentPatient {
+        //if let patient = patientManager.currentPatient {
             ZStack {
                 ScrollView {
                     VStack(spacing: 20) {
@@ -58,6 +59,7 @@ struct PatientStatusView: View {
                                 .cornerRadius(10)
                             
                             Button(action: {
+                                print("Before Popup: \(patient.description)")
                                 editingNotes = true
                             }, label: {
                                 Text("Take Notes")
@@ -79,12 +81,14 @@ struct PatientStatusView: View {
 
             }
 
-        }
+        /*
+         }
         else {
             Text("No patient selected.")
                 .foregroundColor(.gray)
                 .navigationTitle("Patient Status")
         }
+         */
     }
 }
 
@@ -96,42 +100,45 @@ struct EditingPopup : View {
     @Binding var nurseNotes: String
     
     var body: some View {
-        if notesPopup {
-            ZStack {
-                // Dimmed Background
-                Color.black.opacity(0.4)
-                    .edgesIgnoringSafeArea(.all)
-
-                VStack {
-                    Text("Enter your observations here.")
-                        .font(.headline)
-                        .padding()
-                    TextField("Start writing...", text: $nurseNotes)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding()
-                    HStack {
-                        Button("Cancel") {
-                            notesPopup = false
-                        }
-                        .padding()
-
-                        Spacer()
-
-                        Button("Submit") {
-                            if !nurseNotes.isEmpty {
-                                patientManager.recordNotes(notes: nurseNotes)
+        if let patient = patientManager.currentPatient {
+            if notesPopup {
+                ZStack {
+                    // Dimmed Background
+                    Color.black.opacity(0.4)
+                        .edgesIgnoringSafeArea(.all)
+                    VStack {
+                        Text("Enter your observations here.")
+                            .font(.headline)
+                            .padding()
+                        TextField("Start writing...", text: $nurseNotes)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                        HStack {
+                            Button("Cancel") {
                                 notesPopup = false
                             }
-                            nurseNotes = ""
+                            .padding()
+
+                            Spacer()
+
+                            Button("Submit") {
+                                print("Before Submit: \(patient.description)")
+                                if !nurseNotes.isEmpty {
+                                    patientManager.recordNotes(notes: nurseNotes)
+                                    notesPopup = false
+                                    print("After Submit: \(patient.description)")
+                                }
+                                nurseNotes = ""
+                            }
+                            .padding()
                         }
-                        .padding()
                     }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(12)
+                    .shadow(radius: 10)
+                    .frame(maxWidth: 300)
                 }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(12)
-                .shadow(radius: 10)
-                .frame(maxWidth: 300)
             }
         }
     }
@@ -139,6 +146,6 @@ struct EditingPopup : View {
 }
 
 #Preview {
-    PatientStatusView()
+    PatientStatusView(patient: SampleData.samplePatient)
         .environmentObject(SampleData.sampleManager())
 }

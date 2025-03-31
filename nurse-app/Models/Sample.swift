@@ -13,7 +13,7 @@ struct SampleData {
     
     static let samplePhoto = Photo(
         id: 1,
-        patienID: 1,
+        patientID: 1,
         time: Date(),
         image: UIImage(named: "Image") ?? UIImage()
     )
@@ -23,7 +23,7 @@ struct SampleData {
         symptom: .none
     )
     
-    static let samplePatient = Patient(
+    static var _samplePatient = Patient(
         id: 1,
         firstName: "John",
         lastName: "Wang",
@@ -33,10 +33,17 @@ struct SampleData {
         photo: samplePhoto
     )
     
+    static var samplePatient: Binding<Patient> {
+        Binding<Patient>(
+            get: { _samplePatient },
+            set: { _samplePatient = $0 }
+        )
+    }
+    
     static func sampleManager() -> PatientManager {
         let manager = PatientManager()
         manager.currentPatient = samplePatient
-        manager.patientList = [samplePatient]
+        manager.patientList = [samplePatient.wrappedValue]
         return manager
     }
 }

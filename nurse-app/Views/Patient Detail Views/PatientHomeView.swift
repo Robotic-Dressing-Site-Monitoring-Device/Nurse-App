@@ -9,9 +9,9 @@ import SwiftUI
 
 struct PatientHomeView: View {
     @EnvironmentObject var patientManager: PatientManager
-
+    @Binding var patient: Patient
     var body: some View {
-        if let patient = patientManager.currentPatient {
+        //if let patient = patientManager.currentPatient {
             VStack(spacing: 20) {
                 Image(uiImage: patient.photo.image)
                     .resizable()
@@ -21,7 +21,7 @@ struct PatientHomeView: View {
                     .overlay(Circle().stroke(Color.gray, lineWidth: 4))
                     
 
-                PatientPreview(patient: patient)
+                PatientPreview(patient: $patient)
                 
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -46,15 +46,15 @@ struct PatientHomeView: View {
             }
             .padding()
             .navigationTitle("Patient Home")
-        } else {
+        /*} else {
             Text("No patient selected.")
                 .foregroundColor(.gray)
                 .navigationTitle("Patient Home")
-        }
+        }*/
     }
 }
 
 #Preview {
-    PatientHomeView()
+    PatientHomeView(patient: SampleData.samplePatient)
         .environmentObject(SampleData.sampleManager())
 }

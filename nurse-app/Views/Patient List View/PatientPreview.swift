@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PatientPreview: View {
     @EnvironmentObject var manager: PatientManager
-    @State var patient: Patient
+    @Binding var patient: Patient
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Name: \(patient.firstName) \(patient.lastName)")
