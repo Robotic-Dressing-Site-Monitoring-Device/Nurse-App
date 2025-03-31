@@ -13,6 +13,7 @@ class PatientManager: ObservableObject {
     @Published var currentPatient: Patient?
 
     init() {
+        // Initializing Test patients
         for i in 0..<10 {
             var status: patientStatus
             if i % 2 == 0 {
@@ -48,7 +49,7 @@ class PatientManager: ObservableObject {
                 lastName: "Last\(i)",
                 location: "Room \(i)",
                 status: status,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                description: "No Nurse Notes So Far.",
                 photo: photo
             )
             
@@ -87,7 +88,10 @@ class PatientManager: ObservableObject {
         return formatter.string(from: date)
     }
     
-    func recordNotes() {
-        
+    func recordNotes(notes: String) {
+        if var patient = currentPatient {
+            patient.description = notes
+            
+        }
     }
 }
