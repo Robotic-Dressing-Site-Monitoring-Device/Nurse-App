@@ -31,6 +31,6 @@ struct PatientPreview: View {
 }
 
 #Preview {
-    PatientPreview(patient: SampleData.samplePatient)
+    PatientPreview(patient: SampleData.samplePatientBinding[0])
         .environmentObject(PatientManager())
 }

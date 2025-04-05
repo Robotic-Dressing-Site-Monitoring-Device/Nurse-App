@@ -50,6 +50,6 @@ struct PatientMenuView: View {
 }
 
 #Preview {
-    PatientMenuView(patient: SampleData.samplePatient)
+    PatientMenuView(patient: SampleData.samplePatientBinding[0])
         .environmentObject(SampleData.sampleManager())
 }

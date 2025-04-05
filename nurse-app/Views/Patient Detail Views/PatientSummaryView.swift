@@ -89,6 +89,6 @@ struct PatientSummaryView: View {
 }
 
 #Preview {
-    PatientSummaryView(patient: SampleData.samplePatient)
+    PatientSummaryView(patient: SampleData.samplePatientBinding[0])
         .environmentObject(SampleData.sampleManager())
 }

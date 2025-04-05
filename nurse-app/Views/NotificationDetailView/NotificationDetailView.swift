@@ -36,7 +36,7 @@ struct NotificationDetailView: View {
 
 
 #Preview {
-     NotificationDetailView(patient: SampleData.samplePatient)
+     NotificationDetailView(patient: SampleData.samplePatientBinding[0])
         .environmentObject(SampleData.sampleManager())
 }
 

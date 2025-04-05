@@ -65,6 +65,6 @@ struct PatientHomeView: View {
 }
 
 #Preview {
-    PatientHomeView(patient: SampleData.samplePatient)
+    PatientHomeView(patient: SampleData.samplePatientBinding[0])
         .environmentObject(SampleData.sampleManager())
 }

@@ -170,6 +170,6 @@ struct EditingPopup : View {
 }
 
 #Preview {
-    PatientStatusView(patient: SampleData.samplePatient)
+    PatientStatusView(patient: SampleData.samplePatientBinding[0])
         .environmentObject(SampleData.sampleManager())
 }

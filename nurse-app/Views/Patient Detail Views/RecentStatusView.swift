@@ -84,7 +84,7 @@ struct RecentStatusView: View {
 
 
 #Preview {
-    RecentStatusView(patient: SampleData.samplePatient)
+    RecentStatusView(patient: SampleData.samplePatientBinding[0])
         .environmentObject(SampleData.sampleManager())
 }
 
