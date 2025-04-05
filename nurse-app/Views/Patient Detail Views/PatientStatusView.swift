@@ -34,6 +34,8 @@ struct PatientStatusView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
                                 .shadow(radius: 5)
 
+                            Spacer().frame(height: 10)
+
                             Text("Taken on: \(patientManager.formattedDate(latestInjuryPhoto.time))")
                                 .font(.caption)
                                 .foregroundColor(.gray)
@@ -42,30 +44,43 @@ struct PatientStatusView: View {
                         Text("No injury photo available")
                     }
 
-                    HStack {
-                        Text("Status:")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                        RoundedRectangle(cornerRadius: 5)
-                            .fill(patientManager.colorForStatus(patient.status.dressingStatus))
-                            .frame(width: 20, height: 20)
-                    }
-                    .padding(.vertical, 5)
-                    Spacer().frame(height: 50)
+                    Spacer().frame(height: 25)
                     
                     VStack(alignment: .leading, spacing: 15) {
+                        
+                        HStack {
+                            Text("Status:")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(patientManager.colorForStatus(patient.status.dressingStatus))
+                                .frame(width: 20, height: 20)
+                        }
+                        .padding(.vertical, 5)
+                        HStack{
+                            Text("Identified Issue: ")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            
+                            Text("\(patientManager.descriptionForSymptom(patient.status.symptom))")
+                                .foregroundColor(.black)
+                        }
+                        HStack{
+                            Text("Location: ")
+                                .foregroundColor(.black)
+                                .font(.headline)
+                            
+                            Text("\(patient.location)")
+                                .foregroundColor(.black)
+                        }
 
-                        Text("Identified Issue: \(patientManager.descriptionForSymptom(patient.status.symptom))")
-                            .foregroundColor(.black)
-                        Text("Location: \(patient.location)")
-                            .foregroundColor(.black)
                     }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.ButtonColor)
                     .cornerRadius(10)
                     
-                    Spacer().frame(height: 50)
+                    Spacer().frame(height: 30)
 
                     HStack(spacing: 15) {
                         NavigationLink(destination: RecentStatusView(patient: $patient)) {

@@ -10,6 +10,7 @@ import SwiftUI
 struct PatientHomeView: View {
     @EnvironmentObject var patientManager: PatientManager
     @Binding var patient: Patient
+    @State private var showCamera = false
 
     var body: some View {
         ZStack {
@@ -36,19 +37,31 @@ struct PatientHomeView: View {
                     
                     Spacer().frame(height: 20)
                     
-                    Button("Scan") { }
-                        .frame(width: 380)
-                        .padding()
-                        .background(Color.ButtonColor)
-                        .foregroundColor(.black)
-                        .cornerRadius(10)
+                    Button("Scan") {
+                        showCamera = true
+                    }
+                    .frame(width: 380)
+                    .padding()
+                    .background(Color.ButtonColor)
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+                    .sheet(isPresented: $showCamera) {
+                        CameraView { image in
+                            // Save the captured image to patient (e.g. as latest profile or new injury photo)
+                            patient.injuryPhotos.append(
+                                Photo(
+                                    id: patient.injuryPhotos.count + 1,
+                                    patientID: patient.id,
+                                    time: Date(),
+                                    image: image
+                                )
+                            )
+                        }
+                    }
                 }
-            
             }
         }
-        
     }
-    
 }
 
 #Preview {

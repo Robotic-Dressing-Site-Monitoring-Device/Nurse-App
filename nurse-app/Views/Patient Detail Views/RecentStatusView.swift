@@ -18,7 +18,7 @@ struct RecentStatusView: View {
 
                 ScrollView {
                     LazyVStack(spacing: 16) {
-                        ForEach(patient.injuryPhotos) { photo in
+                        ForEach(patient.injuryPhotos.filter { $0.patientID == patient.id }) { photo in
                             HStack(spacing: 0) {
                                 Rectangle()
                                     .fill(patientManager.colorForStatus(patient.status.dressingStatus))
@@ -34,17 +34,16 @@ struct RecentStatusView: View {
                                             .cornerRadius(8)
 
                                         VStack(alignment: .leading, spacing: 15) {
-                                            Text("Taken on: \(patientManager.formattedDate(photo.time))")
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
-
+                                            
                                             Text("Status: \(patient.status.dressingStatus.rawValue)")
-                                                .font(.subheadline)
-                                                .foregroundColor(.black)
+                                                .foregroundColor(patientManager.colorForStatus(patient.status.dressingStatus))
 
                                             Text("Symptom: \(patientManager.descriptionForSymptom(patient.status.symptom))")
                                                 .font(.subheadline)
                                                 .foregroundColor(.black)
+                                            Text("Taken on: \(patientManager.formattedDate(photo.time))")
+                                                .font(.caption)
+                                                .foregroundColor(.gray)
                                         }
                                         .frame(maxWidth: .infinity, alignment: .center)
                                     }

@@ -24,6 +24,7 @@
 		56CE1AA52D99CBF1007B0227 /* Sample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CE1AA42D99CBF1007B0227 /* Sample.swift */; };
 		56CE1AA82D99CC55007B0227 /* NotificationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CE1AA72D99CC55007B0227 /* NotificationDetailView.swift */; };
 		CC23CBFC2DA1B021008763AC /* RecentStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC23CBFB2DA1B017008763AC /* RecentStatusView.swift */; };
+		CC23CC022DA1E011008763AC /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC23CC012DA1E00B008763AC /* CameraView.swift */; };
 		CC9ADCD12D9DA26E00CAD1EF /* Color Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9ADCD02D9DA26900CAD1EF /* Color Model.swift */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 		56CE1AA42D99CBF1007B0227 /* Sample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
 		56CE1AA72D99CC55007B0227 /* NotificationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDetailView.swift; sourceTree = "<group>"; };
 		CC23CBFB2DA1B017008763AC /* RecentStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentStatusView.swift; sourceTree = "<group>"; };
+		CC23CC012DA1E00B008763AC /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		CC9ADCD02D9DA26900CAD1EF /* Color Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color Model.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -183,6 +185,7 @@
 		56CBE4EE2D7652420086D111 /* Patient Detail Views */ = {
 			isa = PBXGroup;
 			children = (
+				CC23CC012DA1E00B008763AC /* CameraView.swift */,
 				CC23CBFB2DA1B017008763AC /* RecentStatusView.swift */,
 				56CBE4EF2D76528F0086D111 /* PatientMenuView.swift */,
 				56CBE4F52D7655C10086D111 /* PatientHomeView.swift */,
@@ -339,6 +342,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				56CBE4FD2D76576B0086D111 /* PatientManager.swift in Sources */,
+				CC23CC022DA1E011008763AC /* CameraView.swift in Sources */,
 				56CBE4FB2D7656860086D111 /* Patient Models.swift in Sources */,
 				56CBE4F92D76561F0086D111 /* PatientPreview.swift in Sources */,
 				56CE1AA82D99CC55007B0227 /* NotificationDetailView.swift in Sources */,
@@ -517,6 +521,7 @@
 				DEVELOPMENT_TEAM = WU5V3TGXNU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need your camera to scan and update the patient status";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -546,6 +551,7 @@
 				DEVELOPMENT_TEAM = WU5V3TGXNU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need your camera to scan and update the patient status";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
