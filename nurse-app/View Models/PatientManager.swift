@@ -62,7 +62,8 @@ class PatientManager: ObservableObject {
                 status: status,
                 description: "No Nurse Notes So Far.",
                 photo: profilephoto,
-                injuryPhotos: injuryPhotos
+                injuryPhotos: injuryPhotos,
+                notes: []
 
             )
             
@@ -102,11 +103,13 @@ class PatientManager: ObservableObject {
     }
     
     func recordNotes(notes: String) {
-         if let currPatient = currentPatient {
-            if let patientIndex = patientList.firstIndex(where: {$0.id == currPatient.id}) {
-                patientList[patientIndex].description = notes
+        if let currPatient = currentPatient {
+            if let index = patientList.firstIndex(where: { $0.id == currPatient.id }) {
+                let newNote = Note(text: notes, timestamp: Date())
+                patientList[index].notes.append(newNote)
             }
         }
-         
     }
+
+
 }

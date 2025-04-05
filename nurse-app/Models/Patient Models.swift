@@ -19,9 +19,11 @@ struct Patient: Identifiable {
     var description: String
     var photo: Photo
     var injuryPhotos: [Photo]
+    var notes: [Note]
+
 
     
-    init(id: Int, firstName: String, lastName: String, location: String, status: patientStatus, description: String, photo: Photo, injuryPhotos: [Photo]) {
+    init(id: Int, firstName: String, lastName: String, location: String, status: patientStatus, description: String, photo: Photo, injuryPhotos: [Photo], notes: [Note] = []) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
@@ -30,6 +32,8 @@ struct Patient: Identifiable {
         self.description = description
         self.photo = photo
         self.injuryPhotos = injuryPhotos
+        self.notes = notes
+
     }
 }
 
@@ -57,4 +61,10 @@ enum Symptom: String{
     case pus = "Pus"
     case blood = "Blood"
     case dressingDmg = "Dressing Damage"
+}
+
+struct Note: Identifiable {
+    let id = UUID()
+    let text: String
+    let timestamp: Date
 }
