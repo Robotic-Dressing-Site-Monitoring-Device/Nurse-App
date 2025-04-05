@@ -18,8 +18,10 @@ struct Patient: Identifiable {
     
     var description: String
     var photo: Photo
+    var injuryPhotos: [Photo]
+
     
-    init(id: Int, firstName: String, lastName: String, location: String, status: patientStatus, description: String, photo: Photo) {
+    init(id: Int, firstName: String, lastName: String, location: String, status: patientStatus, description: String, photo: Photo, injuryPhotos: [Photo]) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
@@ -27,6 +29,7 @@ struct Patient: Identifiable {
         self.status = status
         self.description = description
         self.photo = photo
+        self.injuryPhotos = injuryPhotos
     }
 }
 

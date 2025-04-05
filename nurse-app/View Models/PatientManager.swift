@@ -36,12 +36,23 @@ class PatientManager: ObservableObject {
             }
             
             
-            let photo = Photo(
+            let profilephoto = Photo(
                 id: i,
                 patientID: i,
                 time: Date(),
-                image: UIImage(systemName: "person.fill") ?? UIImage()
+                image: UIImage(named: "ProfilePhoto") ?? UIImage()
             )
+            
+            var injuryPhotos: [Photo] = []
+                        for j in 0..<(2 + i % 2) {
+                            let injuryPhoto = Photo(
+                                id: j,
+                                patientID: i,
+                                time: Date().addingTimeInterval(TimeInterval(-j * 3600)),
+                                image: UIImage(named: "InjuryPhoto") ?? UIImage()
+                            )
+                            injuryPhotos.append(injuryPhoto)
+                        }
             
             let patient = Patient(
                 id: i,
@@ -50,7 +61,9 @@ class PatientManager: ObservableObject {
                 location: "Room \(i)",
                 status: status,
                 description: "No Nurse Notes So Far.",
-                photo: photo
+                photo: profilephoto,
+                injuryPhotos: injuryPhotos
+
             )
             
             patientList.append(patient)
@@ -65,11 +78,11 @@ class PatientManager: ObservableObject {
     func colorForStatus(_ status: DressingStatus) -> Color {
         switch status {
         case .good:
-            return .green
+            return Color.ListGreen
         case .possibleDanger:
-            return .yellow
+            return Color.ListYellow
         case .urgent:
-            return .red
+            return Color.ListRed
         }
     }
 

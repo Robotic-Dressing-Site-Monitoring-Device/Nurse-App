@@ -10,48 +10,75 @@ import SwiftUI
 struct PatientSummaryView: View {
     @EnvironmentObject var patientManager: PatientManager
     @Binding var patient: Patient
+
     var body: some View {
-        //if let patient = patientManager.currentPatient {
-            ScrollView {
-                VStack {
-                    HStack {
-                        // Patient Image
-                        Image(uiImage: patient.photo.image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 200, height: 200)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 4))
-                            .padding(.leading)
+        NavigationStack {
+            ZStack {
+                Color.white.ignoresSafeArea()
+
+                ScrollView {
+                    VStack(spacing: 24) {
+                        Text("Information")
+                            .font(.headline)
+                            .foregroundColor(.black)
                         
-                        // Patient vital info
-                        VStack(alignment: .leading) {
-                            Text("First Name: \(patient.firstName)")
-                            Text("Last Name: \(patient.lastName)")
-                            Text("Location: \(patient.location)")
+                        // Patient image + info
+                        HStack(alignment: .top, spacing: 16) {
+                            // Patient Image
+                            Image(uiImage: patient.photo.image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 130, height: 130)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.gray, lineWidth: 4))
+                                .padding(.leading)
+
+                            // Divider
+                            Divider()
+                                .frame(height: 120)
+
+                            // Info section (just styling here)
+                            ScrollView(.horizontal, showsIndicators: true) {
+                                VStack(alignment: .leading, spacing: 10) {
+                                    Text("Name: \(patient.firstName) \(patient.lastName)")
+                                    Text("Location: \(patient.location)")
+                                    Text("Status: \(patient.status.dressingStatus.rawValue)")
+                                        .foregroundColor(patientManager.colorForStatus(patient.status.dressingStatus))
+                                }
+                                .foregroundColor(.black)
+                                .padding()
+                            }
+                            .frame(width: 200, height: 100, alignment: .leading)
+                            .foregroundColor(.black)
+                            .padding()
+                            .background(Color.ButtonColor)
+                            .cornerRadius(12)
                             
-                            let status = patient.status.dressingStatus
-                            Text("Status: \(status.rawValue)")
-                                .foregroundColor(patientManager.colorForStatus(status))
                         }
+                        .padding(.horizontal)
+
+                        Divider()
+                            .frame(width: 400)
                         
-                    }
-                    .ignoresSafeArea()
-                    
-                    // Nurse Notes (Summary)
-                    Text(patient.description)
+                        Text("Note")
+                            .font(.headline)
+                            .foregroundColor(.black)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(patient.description)
+                                .foregroundColor(.black)
+                        }
                         .padding()
+                        .cornerRadius(10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.ButtonColor)
+                        .padding(.horizontal)
+                    }
+                    .padding(.vertical)
                 }
-                
             }
-            .ignoresSafeArea(edges: .horizontal)
-        /*
-         }
-        else {
-            Text("No patient selected")
+            .navigationTitle("Patient Summary")
         }
-         */
-        
     }
 }
 

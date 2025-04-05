@@ -17,23 +17,43 @@ struct ContentView: View {
     @EnvironmentObject var patientManager: PatientManager
     var body: some View {
         NavigationStack {
-            List {
-                ForEach($patientManager.patientList) { $patient in
-                    VStack {
-                        NavigationLink(destination: PatientMenuView(patient: $patient)
-                            .onAppear {
-                                patientManager.setPatient(patient: $patient)
-                            }) {
-                                PatientPreview(patient: $patient)
-                        }
+            ZStack {
+                Color.white
+                    .ignoresSafeArea()
+                ScrollView {
+                    LazyVStack(spacing: 16) {
+                        ForEach($patientManager.patientList) { $patient in
+                            NavigationLink(destination: PatientMenuView(patient: $patient)
+                                .onAppear {
+                                    patientManager.setPatient(patient: $patient)
+                                }) {
+                                    HStack(spacing: 0) {
+                                        // Colored bar on the left (1/5th width)
+                                        Rectangle()
+                                            .fill(patientManager.colorForStatus(patient.status.dressingStatus))
+                                            .frame(width: 20) // You can adjust the width or use geometry for dynamic width
+                                        
+                                        // Actual preview content
+                                        PatientPreview(patient: $patient)
+                                            .padding()
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .background(Color.white) // Keep the background clean
+                                    }
+                                    .cornerRadius(12)
+                                    .shadow(radius: 2)
+                                }
                             
+                        }
                     }
-                    .listRowBackground(patientManager.colorForStatus(patient.status.dressingStatus))
                     .padding()
+                    .background(Color.white)
                     
                 }
                 
             }
+            .navigationTitle("Patient List")
+            
+
         }
         .onAppear {
             patientManager.currentPatient = nil

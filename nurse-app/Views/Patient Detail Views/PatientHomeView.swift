@@ -10,48 +10,45 @@ import SwiftUI
 struct PatientHomeView: View {
     @EnvironmentObject var patientManager: PatientManager
     @Binding var patient: Patient
+
     var body: some View {
-        //if let patient = patientManager.currentPatient {
-            VStack(spacing: 20) {
-                Image(uiImage: patient.photo.image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 250, height: 250)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 4))
+        ZStack {
+            Color.white.ignoresSafeArea()
+            
+            ScrollView {
+                VStack(spacing: 20) {
+                    Spacer().frame(height: 10)
+
+                    Image(uiImage: patient.photo.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 250, height: 250)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.gray, lineWidth: 2))
                     
+                    Spacer().frame(height: 50)
 
-                PatientPreview(patient: $patient)
-                
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-
-                HStack {
-                    Button("Scan") { }
-                        .frame(maxWidth: .infinity)
+                    PatientPreview(patient: $patient)
+                        .frame(width: 380, height: 150, alignment: .leading)
                         .padding()
-                        .background(Color.black)
-                        .foregroundColor(.white)
+                        .background(Color.ButtonColor)
                         .cornerRadius(10)
-
-                    Button("Status") { }
-                        .frame(maxWidth: .infinity)
+                    
+                    Spacer().frame(height: 20)
+                    
+                    Button("Scan") { }
+                        .frame(width: 380)
                         .padding()
-                        .background(Color.black)
-                        .foregroundColor(.white)
+                        .background(Color.ButtonColor)
+                        .foregroundColor(.black)
                         .cornerRadius(10)
                 }
+            
             }
-            .padding()
-            .navigationTitle("Patient Home")
-        /*} else {
-            Text("No patient selected.")
-                .foregroundColor(.gray)
-                .navigationTitle("Patient Home")
-        }*/
+        }
+        
     }
+    
 }
 
 #Preview {

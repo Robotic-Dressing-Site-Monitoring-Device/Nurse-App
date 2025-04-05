@@ -15,13 +15,22 @@ struct SampleData {
         id: 1,
         patientID: 1,
         time: Date(),
-        image: UIImage(named: "Image") ?? UIImage()
+        image: UIImage(named: "ProfilePhoto") ?? UIImage()
     )
     
     static let sampleStatus = patientStatus(
         dressingStatus: .good,
         symptom: .none
     )
+    
+    static let sampleInjuryPhotos: [Photo] = [
+            Photo(
+                id: 1,
+                patientID: 1,
+                time: Date().addingTimeInterval(-3600),
+                image: UIImage(named: "InjuryPhoto") ?? UIImage()
+            )
+        ]
     
     static var _samplePatient = Patient(
         id: 1,
@@ -30,7 +39,9 @@ struct SampleData {
         location: "Room 777",
         status: sampleStatus,
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        photo: samplePhoto
+        photo: samplePhoto,
+        injuryPhotos: sampleInjuryPhotos
+
     )
     
     static var samplePatient: Binding<Patient> {

@@ -13,84 +13,93 @@ struct PatientStatusView: View {
     @Binding var patient: Patient
     @State var nurseNotes: String = ""
     @State private var editingNotes: Bool = false
-    
+    @State private var titleVisible = false
+
+
     var body: some View {
-        //if let patient = patientManager.currentPatient {
-            ZStack {
-                ScrollView {
-                    VStack(spacing: 20) {
+        ZStack {
+            Color.white.ignoresSafeArea(edges: .bottom)
+            patientManager.colorForStatus(patient.status.dressingStatus)
+                .opacity(0.2)
+                .ignoresSafeArea()
+
+            ScrollView {
+                VStack(spacing: 20) {
+                    if let latestInjuryPhoto = patient.injuryPhotos.first {
                         VStack {
-                            Image(uiImage: patient.photo.image)
+                            Image(uiImage: latestInjuryPhoto.image)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 250, height: 250)
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
                                 .shadow(radius: 5)
-                            
-                            Text("Taken on: \(patientManager.formattedDate(patient.photo.time))")
+
+                            Text("Taken on: \(patientManager.formattedDate(latestInjuryPhoto.time))")
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
-                        
-                        HStack {
-                            Text("Status:")
-                                .font(.headline)
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(patientManager.colorForStatus(patient.status.dressingStatus))
-                                .frame(width: 20, height: 20)
-                        }
-                        .padding(.vertical, 5)
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Identified Issue: \(patientManager.descriptionForSymptom(patient.status.symptom))")
-                            Text("Location: \(patient.location)")
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(.white))
-                        .cornerRadius(10)
-                        
-                        HStack(spacing: 15) {
-                            Button("Recent Status") {}
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.black)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                            
-                            Button(action: {
-                                print("Before Popup: \(patient.description)")
-                                editingNotes = true
-                            }, label: {
-                                Text("Take Notes")
-                            })
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.black)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                        }
+                    } else {
+                        Text("No injury photo available")
+                    }
+
+                    HStack {
+                        Text("Status:")
+                            .font(.headline)
+                            .foregroundColor(.black)
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(patientManager.colorForStatus(patient.status.dressingStatus))
+                            .frame(width: 20, height: 20)
+                    }
+                    .padding(.vertical, 5)
+                    Spacer().frame(height: 50)
+                    
+                    VStack(alignment: .leading, spacing: 15) {
+
+                        Text("Identified Issue: \(patientManager.descriptionForSymptom(patient.status.symptom))")
+                            .foregroundColor(.black)
+                        Text("Location: \(patient.location)")
+                            .foregroundColor(.black)
                     }
                     .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.ButtonColor)
+                    .cornerRadius(10)
                     
-                }
-                .background(patientManager.colorForStatus(patient.status.dressingStatus).opacity(0.3))
-                .ignoresSafeArea(edges: .horizontal)
-                .navigationTitle("Patient Status")
-                EditingPopup(notesPopup: $editingNotes, nurseNotes: $nurseNotes)
+                    Spacer().frame(height: 50)
 
+                    HStack(spacing: 15) {
+                        NavigationLink(destination: RecentStatusView(patient: $patient)) {
+                            Text("Recent Status")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.ButtonColor)
+                                .foregroundColor(.black)
+                                .cornerRadius(10)
+                        }
+
+                        Button(action: {
+                            editingNotes = true
+                        }) {
+                            Text("Take Notes")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.ButtonColor)
+                        .foregroundColor(.black)
+                        .cornerRadius(10)
+                    }
+                }
+                .padding()
             }
 
-        /*
-         }
-        else {
-            Text("No patient selected.")
-                .foregroundColor(.gray)
-                .navigationTitle("Patient Status")
+            if editingNotes {
+                EditingPopup(notesPopup: $editingNotes, nurseNotes: $nurseNotes)
+            }
         }
-         */
+
     }
 }
+
 
 
 // Custom popup for textfields
