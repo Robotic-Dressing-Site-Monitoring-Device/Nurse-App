@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PatientHomeView: View {
     @EnvironmentObject var patientManager: PatientManager
+    @EnvironmentObject var statusManager: StatusManager
+
     @Binding var patient: Patient
     @State private var showCamera = false
 
@@ -56,6 +58,8 @@ struct PatientHomeView: View {
                                     image: image
                                 )
                             )
+                            statusManager.uploadImageToFirebase(patient: patient, image: image)
+
                         }
                     }
                 }

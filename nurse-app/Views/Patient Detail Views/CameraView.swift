@@ -10,6 +10,7 @@ import UIKit
 
 struct CameraView: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
+    
     var onImagePicked: (UIImage) -> Void
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
@@ -20,11 +21,16 @@ struct CameraView: UIViewControllerRepresentable {
         }
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+           
             if let image = info[.originalImage] as? UIImage {
+                print("Image: \(image)")
                 parent.onImagePicked(image)
+            } else {
+                print("Image Fail")
             }
             parent.presentationMode.wrappedValue.dismiss()
         }
+
 
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
             parent.presentationMode.wrappedValue.dismiss()
