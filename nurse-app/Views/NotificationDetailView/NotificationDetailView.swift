@@ -1,42 +1,42 @@
+////
+////  NotificationDetailView.swift
+////  nurse-app
+////
+////  Created by Chris Tseng on 3/3/25.
+////
 //
-//  NotificationDetailView.swift
-//  nurse-app
+//import SwiftUI
 //
-//  Created by Chris Tseng on 3/3/25.
+//struct NotificationDetailView: View {
+//    @EnvironmentObject var manager: PatientManager
+//    @Binding var patient: Patient
+//    var body: some View {
+//        NavigationStack {
+//            VStack (){
+//                NavigationLink(destination: PatientPreview(patient: $patient)) {
+//                    Text("Patient Preview")
+//                        .padding()
+//                        .frame(maxWidth: .infinity)
+//                        .background(Color.blue)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(10)
+//                        .padding()
+//                }
+//                .padding(.top, 20)
+//                Spacer()
+//                
+//                Text("Notification Detail View")
+//                Spacer()
+//            }
+//        }
+//        .ignoresSafeArea(.container, edges: .bottom)
+//    }
+//}
 //
-
-import SwiftUI
-
-struct NotificationDetailView: View {
-    @EnvironmentObject var manager: PatientManager
-    @Binding var patient: Patient
-    var body: some View {
-        NavigationStack {
-            VStack (){
-                NavigationLink(destination: PatientPreview(patient: $patient)) {
-                    Text("Patient Preview")
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding()
-                }
-                .padding(.top, 20)
-                Spacer()
-                
-                Text("Notification Detail View")
-                Spacer()
-            }
-        }
-        .ignoresSafeArea(.container, edges: .bottom)
-    }
-}
-
-
-
-#Preview {
-     NotificationDetailView(patient: SampleData.samplePatientBinding[0])
-        .environmentObject(SampleData.sampleManager())
-}
-
+//
+//
+//#Preview {
+//     NotificationDetailView(patient: SampleData.samplePatientBinding[0])
+//        .environmentObject(SampleData.sampleManager())
+//}
+//

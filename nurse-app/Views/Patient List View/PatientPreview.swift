@@ -30,7 +30,7 @@ struct PatientPreview: View {
     }
 }
 
-#Preview {
-    PatientPreview(patient: SampleData.samplePatientBinding[0])
-        .environmentObject(PatientManager())
-}
+//#Preview {
+//    PatientPreview(patient: SampleData.samplePatientBinding[0])
+//        .environmentObject(PatientManager())
+//}

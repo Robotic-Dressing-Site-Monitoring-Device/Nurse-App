@@ -102,8 +102,8 @@ struct RecentStatusView: View {
     }
 }
 
-#Preview {
-    RecentStatusView(patient: SampleData.samplePatientBinding[0])
-        .environmentObject(SampleData.sampleManager())
-        .environmentObject(StatusManager())
-}
+//#Preview {
+//    RecentStatusView(patient: SampleData.samplePatientBinding[0])
+//        .environmentObject(SampleData.sampleManager())
+//        .environmentObject(StatusManager())
+//}

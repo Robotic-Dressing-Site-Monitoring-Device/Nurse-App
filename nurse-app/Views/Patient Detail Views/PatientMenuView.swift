@@ -49,7 +49,7 @@ struct PatientMenuView: View {
     }
 }
 
-#Preview {
-    PatientMenuView(patient: SampleData.samplePatientBinding[0])
-        .environmentObject(SampleData.sampleManager())
-}
+//#Preview {
+//    PatientMenuView(patient: SampleData.samplePatientBinding[0])
+//        .environmentObject(SampleData.sampleManager())
+//}

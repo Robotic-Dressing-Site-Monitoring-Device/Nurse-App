@@ -23,13 +23,26 @@ struct PatientSummaryView: View {
                     // Patient image + info
                     HStack(alignment: .top, spacing: 16) {
                         // Patient Image
-                        Image(uiImage: patient.photo.image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 130, height: 130)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 4))
-                            .padding(.leading)
+                        AsyncImage(url: URL(string: patient.profileImageURL)) { phase in
+                            switch phase {
+                            case .empty:
+                                ProgressView()
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                            case .failure:
+                                Image(systemName: "person.crop.circle.fill")
+                                    .resizable()
+                                    .foregroundColor(.gray)
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                        .frame(width: 130, height: 130)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.gray, lineWidth: 4))
+
                         
                         // Divider
                         Divider()
@@ -88,7 +101,7 @@ struct PatientSummaryView: View {
     }
 }
 
-#Preview {
-    PatientSummaryView(patient: SampleData.samplePatientBinding[0])
-        .environmentObject(SampleData.sampleManager())
-}
+//#Preview {
+//    PatientSummaryView(patient: SampleData.samplePatientBinding[0])
+//        .environmentObject(SampleData.sampleManager())
+//}

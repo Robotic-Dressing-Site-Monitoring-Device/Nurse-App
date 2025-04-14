@@ -69,6 +69,8 @@ class PatientManager: ObservableObject {
                 let firstName = data["firstName"] as? String ?? "Unknown"
                 let lastName = data["lastName"] as? String ?? "Unknown"
                 let location = data["location"] as? String ?? "Room TBD"
+                let profileImageURL = data["profileImageURL"] as? String ?? ""
+
 
                 var dressingStatus: DressingStatus = .good
                 var symptom: Symptom = .none
@@ -99,9 +101,10 @@ class PatientManager: ObservableObject {
                             location: location,
                             status: patientStatus(dressingStatus: dressingStatus, symptom: symptom),
                             description: "Loaded from Firestore",
-                            photo: Photo(id: 0, patientID: index, time: Date(), image: UIImage()),
+                            profileImageURL: profileImageURL,
                             injuryPhotos: [],
                             notes: []
+
                         )
 
                         DispatchQueue.main.async {

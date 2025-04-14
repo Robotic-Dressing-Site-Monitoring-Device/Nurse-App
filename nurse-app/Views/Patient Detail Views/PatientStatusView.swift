@@ -187,8 +187,8 @@ struct EditingPopup : View {
     }
 }
 
-#Preview {
-    PatientStatusView(patient: SampleData.samplePatientBinding[0])
-        .environmentObject(SampleData.sampleManager())
-        .environmentObject(StatusManager())
-}
+//#Preview {
+//    PatientStatusView(patient: SampleData.samplePatientBinding[0])
+//        .environmentObject(SampleData.sampleManager())
+//        .environmentObject(StatusManager())
+//}

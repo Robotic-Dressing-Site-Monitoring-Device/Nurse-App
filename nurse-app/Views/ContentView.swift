@@ -57,7 +57,7 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-        .environmentObject(SampleData.sampleManager())
-}
+//#Preview {
+//    ContentView()
+//        .environmentObject(SampleData.sampleManager())
+//}

@@ -22,12 +22,28 @@ struct PatientHomeView: View {
                 VStack(spacing: 20) {
                     Spacer().frame(height: 10)
 
-                    Image(uiImage: patient.photo.image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 250, height: 250)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.gray, lineWidth: 2))
+                    AsyncImage(url: URL(string: patient.profileImageURL)) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                                .frame(width: 250, height: 250)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFit()
+                        case .failure:
+                            Image(systemName: "person.crop.circle.fill.badge.exclamationmark")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(.gray)
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                    .frame(width: 250, height: 250)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray, lineWidth: 2))
+
                     
                     Spacer().frame(height: 50)
 
@@ -68,7 +84,7 @@ struct PatientHomeView: View {
     }
 }
 
-#Preview {
-    PatientHomeView(patient: SampleData.samplePatientBinding[0])
-        .environmentObject(SampleData.sampleManager())
-}
+//#Preview {
+//    PatientHomeView(patient: SampleData.samplePatientBinding[0])
+//        .environmentObject(SampleData.sampleManager())
+//}
