@@ -19,27 +19,26 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.white
-                    .ignoresSafeArea()
+                Color.white.ignoresSafeArea()
 
                 ScrollView {
                     LazyVStack(spacing: 16) {
                         ForEach(patientManager.patientList) { patient in
-                            NavigationLink(destination: PatientMenuView(patient: .constant(patient))
-                                .onAppear {
-                                    patientManager.setPatient(patient: .constant(patient))
-                                }) {
+                            NavigationLink(
+                                destination: PatientMenuView(patient: .constant(patient))
+                                    .onAppear {
+                                        patientManager.setPatient(patient: .constant(patient))
+                                    }
+                            ) {
                                 HStack(spacing: 0) {
-                                    // Colored bar on the left (1/5th width)
                                     Rectangle()
                                         .fill(patientManager.colorForStatus(patient.status.dressingStatus))
-                                        .frame(width: 20) // You can adjust the width or use geometry for dynamic width
+                                        .frame(width: 20)
 
-                                    // Actual preview content
                                     PatientPreview(patient: .constant(patient))
                                         .padding()
                                         .frame(maxWidth: .infinity, alignment: .leading)
-                                        .background(Color.white) // Keep the background clean
+                                        .background(Color.white)
                                 }
                                 .cornerRadius(12)
                                 .shadow(radius: 2)
@@ -53,8 +52,7 @@ struct ContentView: View {
             .navigationTitle("Patient List")
         }
         .onAppear {
-            patientManager.patientList = SampleData.samplePatients
-            patientManager.currentPatient = Binding(get: { patientManager.patientList.first! }, set: { _ in })
+            patientManager.loadPatientsFromFirestore()
         }
     }
 }

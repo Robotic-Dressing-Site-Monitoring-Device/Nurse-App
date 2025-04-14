@@ -7,75 +7,17 @@
 
 import Foundation
 import SwiftUI
+import FirebaseFirestore
 
 class PatientManager: ObservableObject {
     @Published var patientList: [Patient] = []
     @Published var currentPatient: Binding<Patient>?
 
-    init() {
-        // Initializing Test patients
-        for i in 0..<10 {
-            var status: patientStatus
-            if i % 2 == 0 {
-                status = patientStatus(
-                    dressingStatus: .good,
-                    symptom: .none
-                )
-            }
-            else if i % 3 == 0 {
-                status = patientStatus(
-                    dressingStatus: .possibleDanger,
-                    symptom: .redness
-                )
-            }
-            else {
-                status = patientStatus(
-                    dressingStatus: .urgent,
-                    symptom: .blood
-                )
-            }
-            
-            
-            let profilephoto = Photo(
-                id: i,
-                patientID: i,
-                time: Date(),
-                image: UIImage(named: "ProfilePhoto") ?? UIImage()
-            )
-            
-            var injuryPhotos: [Photo] = []
-                        for j in 0..<(2 + i % 2) {
-                            let injuryPhoto = Photo(
-                                id: j,
-                                patientID: i,
-                                time: Date().addingTimeInterval(TimeInterval(-j * 3600)),
-                                image: UIImage(named: "InjuryPhoto") ?? UIImage()
-                            )
-                            injuryPhotos.append(injuryPhoto)
-                        }
-            
-            let patient = Patient(
-                id: i,
-                firstName: "First\(i)",
-                lastName: "Last\(i)",
-                location: "Room \(i)",
-                status: status,
-                description: "No Nurse Notes So Far.",
-                photo: profilephoto,
-                injuryPhotos: injuryPhotos,
-                notes: []
-
-            )
-            
-            patientList.append(patient)
-        }
-    }
-    
     func setPatient(patient: Binding<Patient>) {
         self.currentPatient = patient
         print("Current patient is \(patient.id)")
     }
-    
+
     func colorForStatus(_ status: DressingStatus) -> Color {
         switch status {
         case .good:
@@ -88,12 +30,7 @@ class PatientManager: ObservableObject {
     }
 
     func descriptionForSymptom(_ symptom: Symptom) -> String {
-        switch symptom {
-        case .none:
-            return "No symptoms"
-        default:
-            return symptom.rawValue
-        }
+        return symptom.displayName
     }
 
     func formattedDate(_ date: Date) -> String {
@@ -101,7 +38,7 @@ class PatientManager: ObservableObject {
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         return formatter.string(from: date)
     }
-    
+
     func recordNotes(notes: String) {
         if let currPatient = currentPatient {
             if let index = patientList.firstIndex(where: { $0.id == currPatient.id }) {
@@ -111,5 +48,77 @@ class PatientManager: ObservableObject {
         }
     }
 
+    func loadPatientsFromFirestore() {
+        let db = Firestore.firestore()
+        self.patientList = []
 
+        db.collection("patients").getDocuments { snapshot, error in
+            if let error = error {
+                print("Error loading patients: \(error)")
+                return
+            }
+
+            guard let documents = snapshot?.documents else { return }
+
+            let group = DispatchGroup()
+
+            for (index, doc) in documents.enumerated() {
+                let data = doc.data()
+                let docID = doc.documentID
+
+                let firstName = data["firstName"] as? String ?? "Unknown"
+                let lastName = data["lastName"] as? String ?? "Unknown"
+                let location = data["location"] as? String ?? "Room TBD"
+
+                var dressingStatus: DressingStatus = .good
+                var symptom: Symptom = .none
+
+                group.enter()
+
+                db.collection("patients").document(docID)
+                    .collection("photos")
+                    .order(by: "time", descending: true)
+                    .limit(to: 1)
+                    .getDocuments { snap, err in
+                        if let photoData = snap?.documents.first?.data() {
+                            let issueRaw = (photoData["issue"] as? String ?? "none").lowercased()
+                            let statusRaw = (photoData["status"] as? String ?? "good").lowercased()
+
+                            print("\n Latest photo data: \(docID):")
+                            print("IssueRaw = \(issueRaw) → Symptom = \(Symptom.fromRawFirestore(issueRaw))")
+                            print("StatusRaw = \(statusRaw) → DressingStatus = \(DressingStatus.fromRawFirestore(statusRaw))")
+
+                            symptom = Symptom.fromRawFirestore(issueRaw)
+                            dressingStatus = DressingStatus.fromRawFirestore(statusRaw)
+                        }
+
+                        let patient = Patient(
+                            id: index,
+                            firstName: firstName,
+                            lastName: lastName,
+                            location: location,
+                            status: patientStatus(dressingStatus: dressingStatus, symptom: symptom),
+                            description: "Loaded from Firestore",
+                            photo: Photo(id: 0, patientID: index, time: Date(), image: UIImage()),
+                            injuryPhotos: [],
+                            notes: []
+                        )
+
+                        DispatchQueue.main.async {
+                            self.patientList.append(patient)
+                            print("Added patient: \(firstName) \(lastName)")
+                            print("Final status = \(dressingStatus), symptom = \(symptom)")
+                            group.leave()
+                        }
+                    }
+            }
+
+            group.notify(queue: .main) {
+                print("Latest statuses loaded")
+                if let first = self.patientList.first {
+                    self.currentPatient = Binding(get: { first }, set: { _ in })
+                }
+            }
+        }
+    }
 }

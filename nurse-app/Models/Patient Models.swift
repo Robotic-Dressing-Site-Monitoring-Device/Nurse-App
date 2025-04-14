@@ -15,14 +15,11 @@ struct Patient: Identifiable {
     var location: String
     
     var status: patientStatus
-    
     var description: String
     var photo: Photo
     var injuryPhotos: [Photo]
     var notes: [Note]
 
-
-    
     init(id: Int, firstName: String, lastName: String, location: String, status: patientStatus, description: String, photo: Photo, injuryPhotos: [Photo], notes: [Note] = []) {
         self.id = id
         self.firstName = firstName
@@ -33,11 +30,10 @@ struct Patient: Identifiable {
         self.photo = photo
         self.injuryPhotos = injuryPhotos
         self.notes = notes
-
     }
 }
 
-struct Photo: Identifiable{
+struct Photo: Identifiable {
     let id: Int
     let patientID: Int
     let time: Date
@@ -50,17 +46,55 @@ struct patientStatus {
 }
 
 enum DressingStatus: String {
-    case good = "Good"
-    case possibleDanger = "Patient may require care"
-    case urgent = "Needs Immediate Attention"
+    case good
+    case possibleDanger
+    case urgent
+
+    var displayName: String {
+        switch self {
+        case .good: return "Good"
+        case .possibleDanger: return "Patient may require care"
+        case .urgent: return "Needs Immediate Attention"
+        }
+    }
+
+    static func fromRawFirestore(_ value: String) -> DressingStatus {
+        switch value.lowercased() {
+        case "good": return .good
+        case "possibledanger", "possible_danger": return .possibleDanger
+        case "urgent": return .urgent
+        default: return .good
+        }
+    }
 }
 
-enum Symptom: String{
-    case none = "No symptoms"
-    case redness = "Skin Redness"
-    case pus = "Pus"
-    case blood = "Blood"
-    case dressingDmg = "Dressing Damage"
+enum Symptom: String {
+    case none
+    case redness
+    case pus
+    case blood
+    case dressingDmg
+
+    var displayName: String {
+        switch self {
+        case .none: return "No symptoms"
+        case .redness: return "Skin Redness"
+        case .pus: return "Pus"
+        case .blood: return "Blood"
+        case .dressingDmg: return "Dressing Damage"
+        }
+    }
+
+    static func fromRawFirestore(_ value: String) -> Symptom {
+        switch value.lowercased() {
+        case "none": return .none
+        case "redness": return .redness
+        case "pus": return .pus
+        case "blood": return .blood
+        case "dressingdmg", "dressing_dmg": return .dressingDmg
+        default: return .none
+        }
+    }
 }
 
 struct Note: Identifiable {
