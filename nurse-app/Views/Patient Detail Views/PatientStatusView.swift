@@ -5,38 +5,57 @@
 //  Created by Chang, Daniel Soobin on 3/3/25.
 //
 
-
 import SwiftUI
 
 struct PatientStatusView: View {
     @EnvironmentObject var patientManager: PatientManager
+    @EnvironmentObject var statusManager: StatusManager
     @Binding var patient: Patient
     @State var nurseNotes: String = ""
     @State private var editingNotes: Bool = false
-    @State private var titleVisible = false
 
+    var latestRemoteStatus: RemotePhoto? {
+        statusManager.remotePhotos
+            .filter { $0.patientName.lowercased() == "\(patient.firstName.lowercased()) \(patient.lastName.lowercased())" }
+            .sorted(by: { $0.time > $1.time })
+            .first
+    }
 
     var body: some View {
         ZStack {
             Color.white.ignoresSafeArea(edges: .bottom)
-            patientManager.colorForStatus(patient.status.dressingStatus)
+            patientManager.colorForStatus(latestRemoteStatus != nil ? DressingStatus.fromRawFirestore(latestRemoteStatus!.status) : patient.status.dressingStatus)
                 .opacity(0.2)
                 .ignoresSafeArea()
 
             ScrollView {
                 VStack(spacing: 20) {
-                    if let latestInjuryPhoto = patient.injuryPhotos.first {
+                    if let latestPhoto = latestRemoteStatus {
                         VStack {
-                            Image(uiImage: latestInjuryPhoto.image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 250, height: 250)
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                                .shadow(radius: 5)
+                            AsyncImage(url: URL(string: latestPhoto.imageURL)) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView()
+                                        .frame(width: 250, height: 250)
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 250, height: 250)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .shadow(radius: 5)
+                                case .failure:
+                                    Color.gray
+                                        .frame(width: 250, height: 250)
+                                        .overlay(Text("Failed to load image"))
+                                @unknown default:
+                                    EmptyView()
+                                }
+                            }
 
                             Spacer().frame(height: 10)
 
-                            Text("Taken on: \(patientManager.formattedDate(latestInjuryPhoto.time))")
+                            Text("Taken on: \(patientManager.formattedDate(latestPhoto.time))")
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
@@ -44,42 +63,41 @@ struct PatientStatusView: View {
                         Text("No injury photo available")
                     }
 
+
                     Spacer().frame(height: 25)
-                    
+
                     VStack(alignment: .leading, spacing: 15) {
-                        
                         HStack {
                             Text("Status:")
                                 .font(.headline)
                                 .foregroundColor(.black)
                             RoundedRectangle(cornerRadius: 5)
-                                .fill(patientManager.colorForStatus(patient.status.dressingStatus))
+                                .fill(patientManager.colorForStatus(latestRemoteStatus != nil ? DressingStatus.fromRawFirestore(latestRemoteStatus!.status) : patient.status.dressingStatus))
                                 .frame(width: 20, height: 20)
                         }
                         .padding(.vertical, 5)
+
                         HStack{
                             Text("Identified Issue: ")
                                 .font(.headline)
                                 .foregroundColor(.black)
-                            
-                            Text("\(patientManager.descriptionForSymptom(patient.status.symptom))")
+                            Text(latestRemoteStatus != nil ? Symptom.fromRawFirestore(latestRemoteStatus!.issue).displayName : patientManager.descriptionForSymptom(patient.status.symptom))
                                 .foregroundColor(.black)
                         }
+
                         HStack{
                             Text("Location: ")
                                 .foregroundColor(.black)
                                 .font(.headline)
-                            
                             Text("\(patient.location)")
                                 .foregroundColor(.black)
                         }
-
                     }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.ButtonColor)
                     .cornerRadius(10)
-                    
+
                     Spacer().frame(height: 30)
 
                     HStack(spacing: 15) {
@@ -111,10 +129,12 @@ struct PatientStatusView: View {
                 EditingPopup(notesPopup: $editingNotes, nurseNotes: $nurseNotes)
             }
         }
+        .onAppear {
+            statusManager.fetchPhotos(for: patient)
+        }
 
     }
 }
-
 
 
 // Custom popup for textfields
@@ -122,12 +142,11 @@ struct EditingPopup : View {
     @EnvironmentObject var patientManager: PatientManager
     @Binding var notesPopup: Bool
     @Binding var nurseNotes: String
-    
+
     var body: some View {
         if let patient = patientManager.currentPatient {
             if notesPopup {
                 ZStack {
-                    // Dimmed Background
                     Color.black.opacity(0.4)
                         .edgesIgnoringSafeArea(.all)
                     VStack {
@@ -166,10 +185,10 @@ struct EditingPopup : View {
             }
         }
     }
-    
 }
 
 #Preview {
     PatientStatusView(patient: SampleData.samplePatientBinding[0])
         .environmentObject(SampleData.sampleManager())
+        .environmentObject(StatusManager())
 }

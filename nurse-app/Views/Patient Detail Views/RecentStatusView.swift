@@ -10,6 +10,13 @@ import SwiftUI
 struct RecentStatusView: View {
     @Binding var patient: Patient
     @EnvironmentObject var patientManager: PatientManager
+    @EnvironmentObject var statusManager: StatusManager
+
+    var filteredPhotos: [RemotePhoto] {
+        statusManager.remotePhotos
+            .filter { $0.patientName.lowercased() == "\(patient.firstName.lowercased()) \(patient.lastName.lowercased())" }
+            .sorted(by: { $0.time > $1.time })
+    }
 
     var body: some View {
         NavigationStack {
@@ -18,37 +25,48 @@ struct RecentStatusView: View {
 
                 ScrollView {
                     LazyVStack(spacing: 16) {
-                        ForEach(patient.injuryPhotos.filter { $0.patientID == patient.id }) { photo in
+                        ForEach(filteredPhotos) { photo in
                             HStack(spacing: 0) {
                                 Rectangle()
-                                    .fill(patientManager.colorForStatus(patient.status.dressingStatus))
+                                    .fill(patientManager.colorForStatus(DressingStatus.fromRawFirestore(photo.status)))
                                     .frame(width: 20)
 
                                 VStack(alignment: .leading, spacing: 8) {
-                                    
                                     HStack(alignment: .center, spacing: 12) {
-                                        Image(uiImage: photo.image)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 150, height: 150)
-                                            .cornerRadius(8)
+                                        AsyncImage(url: URL(string: photo.imageURL)) { phase in
+                                            switch phase {
+                                            case .empty:
+                                                ProgressView()
+                                                    .frame(width: 150, height: 150)
+                                            case .success(let image):
+                                                image
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 150, height: 150)
+                                                    .cornerRadius(8)
+                                            case .failure:
+                                                Color.gray
+                                                    .frame(width: 150, height: 150)
+                                                    .cornerRadius(8)
+                                            @unknown default:
+                                                EmptyView()
+                                            }
+                                        }
 
                                         VStack(alignment: .leading, spacing: 15) {
-                                            
-                                            Text("Status: \(patient.status.dressingStatus.rawValue)")
-                                                .foregroundColor(patientManager.colorForStatus(patient.status.dressingStatus))
+                                            Text("Status: \(DressingStatus.fromRawFirestore(photo.status).displayName)")
+                                                .foregroundColor(patientManager.colorForStatus(DressingStatus.fromRawFirestore(photo.status)))
 
-                                            Text("Symptom: \(patientManager.descriptionForSymptom(patient.status.symptom))")
+                                            Text("Symptom: \(Symptom.fromRawFirestore(photo.issue).displayName)")
                                                 .font(.subheadline)
                                                 .foregroundColor(.black)
+
                                             Text("Taken on: \(patientManager.formattedDate(photo.time))")
                                                 .font(.caption)
                                                 .foregroundColor(.gray)
                                         }
                                         .frame(maxWidth: .infinity, alignment: .center)
                                     }
-
-                                  
 
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text("Notes")
@@ -77,14 +95,15 @@ struct RecentStatusView: View {
                 }
             }
             .navigationTitle("Recent Status")
+            .onAppear {
+                statusManager.fetchPhotos(for: patient)
+            }
         }
     }
 }
 
-
-
 #Preview {
     RecentStatusView(patient: SampleData.samplePatientBinding[0])
         .environmentObject(SampleData.sampleManager())
+        .environmentObject(StatusManager())
 }
-
