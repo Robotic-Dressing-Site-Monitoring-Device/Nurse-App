@@ -106,7 +106,6 @@ class PatientManager: ObservableObject {
             }
         }
     }
-    // MARK: - Local notes storage
     func saveNotesToUserDefaults(for patient: Patient) {
         let key = "notes_\(patient.id)"
         if let encoded = try? JSONEncoder().encode(patient.notes) {
@@ -133,7 +132,6 @@ class PatientManager: ObservableObject {
                 updated.notes.append(newNote)
                 currPatient.wrappedValue = updated
 
-                // ✅ 本地儲存
                 saveNotesToUserDefaults(for: updated)
             }
         }
