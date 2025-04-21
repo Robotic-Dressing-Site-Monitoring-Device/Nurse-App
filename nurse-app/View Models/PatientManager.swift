@@ -39,14 +39,7 @@ class PatientManager: ObservableObject {
         return formatter.string(from: date)
     }
     
-    func recordNotes(notes: String) {
-        if let currPatient = currentPatient {
-            if let index = patientList.firstIndex(where: { $0.id == currPatient.id }) {
-                let newNote = Note(text: notes, timestamp: Date())
-                patientList[index].notes.append(newNote)
-            }
-        }
-    }
+    
     
     func loadPatientsFromFirestore() {
         let db = Firestore.firestore()
@@ -95,7 +88,7 @@ class PatientManager: ObservableObject {
                             description: "Loaded from Firestore",
                             profileImageURL: profileImageURL,
                             injuryPhotos: [],
-                            notes: []
+                            notes: self.loadNotesFromUserDefaults(for: index)
                         )
                         
                         DispatchQueue.main.async {
@@ -113,4 +106,37 @@ class PatientManager: ObservableObject {
             }
         }
     }
+    // MARK: - Local notes storage
+    func saveNotesToUserDefaults(for patient: Patient) {
+        let key = "notes_\(patient.id)"
+        if let encoded = try? JSONEncoder().encode(patient.notes) {
+            UserDefaults.standard.set(encoded, forKey: key)
+        }
+    }
+
+    func loadNotesFromUserDefaults(for patientID: Int) -> [Note] {
+        let key = "notes_\(patientID)"
+        if let data = UserDefaults.standard.data(forKey: key),
+           let decoded = try? JSONDecoder().decode([Note].self, from: data) {
+            return decoded
+        }
+        return []
+    }
+    func recordNotes(notes: String) {
+        let newNote = Note(text: notes, timestamp: Date())
+
+        if let currPatient = currentPatient {
+            if let index = patientList.firstIndex(where: { $0.id == currPatient.id }) {
+                patientList[index].notes.append(newNote)
+
+                var updated = currPatient.wrappedValue
+                updated.notes.append(newNote)
+                currPatient.wrappedValue = updated
+
+                // ✅ 本地儲存
+                saveNotesToUserDefaults(for: updated)
+            }
+        }
+    }
+
 }
