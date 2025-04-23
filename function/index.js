@@ -28,19 +28,18 @@ exports.analyzeImageWithRoboflow = onDocumentCreated("patients/{patientId}/photo
     );
 
     const predictions = roboflowResponse.data.predictions;
-    let issue = "good";
+    let issue = [];
 
     for (const pred of predictions) {
       if (pred.confidence >= 0.4) {
         const cls = pred.class.toLowerCase();
         if (["pus", "blood", "dressing damage", "redness"].includes(cls)) {
-          issue = cls.replace(" ", "_");
-          break;
+          issue.push(cls.replace(" ", "_"));
         }
       }
     }
 
-    const status = issue === "good" ? "good" : "urgent";
+    const status = issue.length > 0 ? "urgent" : "good";
 
     const db = getFirestore();
     await db
