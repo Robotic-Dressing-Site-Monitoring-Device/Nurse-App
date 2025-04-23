@@ -20,7 +20,7 @@ exports.analyzeImageWithRoboflow = onDocumentCreated("patients/{patientId}/photo
     const base64Image = Buffer.from(response.data).toString("base64");
 
     const roboflowResponse = await axios.post(
-      "https://serverless.roboflow.com/my-first-project-x5u0k/8?api_key=Gl3Piz2o3nvjnAVyTJvT",
+      "https://serverless.roboflow.com/my-first-project-x5u0k/8?api_key=Gl3Piz2o3nvjnAVyTJvT&format=image",
       base64Image,
       {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
