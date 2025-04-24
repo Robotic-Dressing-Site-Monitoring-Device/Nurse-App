@@ -43,4 +43,3 @@ struct nurse_appApp: App {
     }
   }
 }
-

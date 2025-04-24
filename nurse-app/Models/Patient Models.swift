@@ -73,7 +73,7 @@ enum Symptom: String {
     case redness
     case pus
     case blood
-    case dressingDmg
+    case dressingDmg = "dressing_damage" // ✅ 對應 Firestore 寫入的值
 
     var displayName: String {
         switch self {
@@ -86,14 +86,7 @@ enum Symptom: String {
     }
 
     static func fromRawFirestore(_ value: String) -> Symptom {
-        switch value.lowercased() {
-        case "none": return .none
-        case "redness": return .redness
-        case "pus": return .pus
-        case "blood": return .blood
-        case "dressingdmg", "dressing_dmg": return .dressingDmg
-        default: return .none
-        }
+        return Symptom(rawValue: value.lowercased()) ?? .none
     }
 }
 

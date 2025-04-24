@@ -12,12 +12,12 @@ import FirebaseFirestore
 class PatientManager: ObservableObject {
     @Published var patientList: [Patient] = []
     @Published var currentPatient: Binding<Patient>?
-    
+
     func setPatient(patient: Binding<Patient>) {
         self.currentPatient = patient
         print("Current patient is \(patient.id)")
     }
-    
+
     func colorForStatus(_ status: DressingStatus) -> Color {
         switch status {
         case .good:
@@ -28,57 +28,62 @@ class PatientManager: ObservableObject {
             return Color.ListRed
         }
     }
-    
+
     func descriptionForSymptom(_ symptom: Symptom) -> String {
         return symptom.displayName
     }
-    
+
     func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         return formatter.string(from: date)
     }
-    
-    
-    
+
     func loadPatientsFromFirestore() {
         let db = Firestore.firestore()
-        
+
         db.collection("patients").addSnapshotListener { snapshot, error in
             if let error = error {
                 print("Error loading patients: \(error)")
                 return
             }
-            
+
             guard let documents = snapshot?.documents else { return }
-            
+
             var updatedList: [Patient] = []
-            
+
             for (index, doc) in documents.enumerated() {
                 let data = doc.data()
                 let docID = doc.documentID
-                
+
                 let firstName = data["firstName"] as? String ?? "Unknown"
                 let lastName = data["lastName"] as? String ?? "Unknown"
                 let location = data["location"] as? String ?? "Room TBD"
                 let profileImageURL = data["profileImageURL"] as? String ?? ""
-                
+
                 var dressingStatus: DressingStatus = .good
                 var symptom: Symptom = .none
-                
+
                 db.collection("patients").document(docID)
                     .collection("photos")
                     .order(by: "time", descending: true)
                     .limit(to: 1)
                     .getDocuments { snap, err in
                         if let photoData = snap?.documents.first?.data() {
-                            let issueRaw = (photoData["issue"] as? String ?? "none").lowercased()
                             let statusRaw = (photoData["status"] as? String ?? "good").lowercased()
-                            
-                            symptom = Symptom.fromRawFirestore(issueRaw)
+
+                            // ✅ Handle both [String] and String for 'issue'
+                            if let issueArray = photoData["issue"] as? [String], let firstIssue = issueArray.first {
+                                symptom = Symptom.fromRawFirestore(firstIssue)
+                            } else if let issueString = photoData["issue"] as? String {
+                                symptom = Symptom.fromRawFirestore(issueString)
+                            } else {
+                                symptom = .none
+                            }
+
                             dressingStatus = DressingStatus.fromRawFirestore(statusRaw)
                         }
-                        
+
                         let patient = Patient(
                             id: index,
                             firstName: firstName,
@@ -90,10 +95,10 @@ class PatientManager: ObservableObject {
                             injuryPhotos: [],
                             notes: self.loadNotesFromUserDefaults(for: index)
                         )
-                        
+
                         DispatchQueue.main.async {
                             updatedList.append(patient)
-                            
+
                             if updatedList.count == documents.count {
                                 self.patientList = updatedList
                                 print("patientList updated with \(updatedList.count) patients")
@@ -106,6 +111,7 @@ class PatientManager: ObservableObject {
             }
         }
     }
+
     func saveNotesToUserDefaults(for patient: Patient) {
         let key = "notes_\(patient.id)"
         if let encoded = try? JSONEncoder().encode(patient.notes) {
@@ -121,6 +127,7 @@ class PatientManager: ObservableObject {
         }
         return []
     }
+
     func recordNotes(notes: String) {
         let newNote = Note(text: notes, timestamp: Date())
 
@@ -136,5 +143,4 @@ class PatientManager: ObservableObject {
             }
         }
     }
-
 }

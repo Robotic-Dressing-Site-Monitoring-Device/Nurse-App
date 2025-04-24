@@ -81,7 +81,7 @@ struct PatientStatusView: View {
                             Text("Identified Issue: ")
                                 .font(.headline)
                                 .foregroundColor(.black)
-                            Text(latestRemoteStatus != nil ? Symptom.fromRawFirestore(latestRemoteStatus!.issue).displayName : patientManager.descriptionForSymptom(patient.status.symptom))
+                            Text(latestRemoteStatus != nil ? Symptom.fromRawFirestore(latestRemoteStatus!.issue.first ?? "none").displayName : patientManager.descriptionForSymptom(patient.status.symptom))
                                 .foregroundColor(.black)
                         }
 

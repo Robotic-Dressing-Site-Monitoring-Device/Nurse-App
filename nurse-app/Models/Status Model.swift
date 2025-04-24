@@ -9,7 +9,7 @@ import Foundation
 struct RemotePhoto: Identifiable {
     let id: String  
     let imageURL: String
-    let issue: String
+    let issue: [String]
     let status: String
     let time: Date
     let patientName: String

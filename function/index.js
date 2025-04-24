@@ -20,7 +20,7 @@ exports.analyzeImageWithRoboflow = onDocumentCreated("patients/{patientId}/photo
     const base64Image = Buffer.from(response.data).toString("base64");
 
     const roboflowResponse = await axios.post(
-      "https://serverless.roboflow.com/my-first-project-x5u0k/8?api_key=Gl3Piz2o3nvjnAVyTJvT&format=image",
+      "https://serverless.roboflow.com/my-first-project-x5u0k/8?api_key=Gl3Piz2o3nvjnAVyTJvT",
       base64Image,
       {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -28,19 +28,22 @@ exports.analyzeImageWithRoboflow = onDocumentCreated("patients/{patientId}/photo
     );
 
     const predictions = roboflowResponse.data.predictions;
-    let issue = [];
+    let issues = [];
 
     for (const pred of predictions) {
       if (pred.confidence >= 0.4) {
         const cls = pred.class.toLowerCase();
         if (["pus", "blood", "dressing damage", "redness"].includes(cls)) {
-          issue.push(cls.replace(" ", "_"));
-          break;
+          issues.push(cls.replace(" ", "_")); // e.g. dressing_damage
         }
       }
     }
 
-    const status = issue.length === 0 ? "good" : "urgent";
+    if (issues.length === 0) {
+      issues.push("none");
+    }
+
+    const status = issues.includes("none") ? "good" : "urgent";
 
     const db = getFirestore();
     await db
@@ -48,17 +51,17 @@ exports.analyzeImageWithRoboflow = onDocumentCreated("patients/{patientId}/photo
       .doc(event.params.patientId)
       .collection("photos")
       .doc(event.params.photoId)
-      .update({
-        issue,
-        status,
-        analyzed: true,
-      });
+      .set({
+        issue: issues,         
+        status: status,
+        analyzed: true
+      }, { merge: true });     
 
-    console.log(`Analysis complete: issue = ${issue}, status = ${status}`);
+    console.log(`✅ Done: issue = ${issues}, status = ${status}`);
     return null;
 
   } catch (err) {
-    console.error("❌ Roboflow 分析失敗：", err);
+    console.error("❌ Roboflow fail:", err);
     return null;
   }
 });

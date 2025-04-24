@@ -57,7 +57,7 @@ struct RecentStatusView: View {
                                             Text("Status: \(DressingStatus.fromRawFirestore(photo.status).displayName)")
                                                 .foregroundColor(patientManager.colorForStatus(DressingStatus.fromRawFirestore(photo.status)))
 
-                                            Text("Symptom: \(Symptom.fromRawFirestore(photo.issue).displayName)")
+                                            Text("Symptom: \(Symptom.fromRawFirestore(photo.issue.first ?? "none").displayName)")
                                                 .font(.subheadline)
                                                 .foregroundColor(.black)
 
