@@ -20,12 +20,9 @@ class PatientManager: ObservableObject {
 
     func colorForStatus(_ status: DressingStatus) -> Color {
         switch status {
-        case .good:
-            return Color.ListGreen
-        case .possibleDanger:
-            return Color.ListYellow
-        case .urgent:
-            return Color.ListRed
+        case .good: return Color.ListGreen
+        case .possibleDanger: return Color.ListYellow
+        case .urgent: return Color.ListRed
         }
     }
 
@@ -54,7 +51,6 @@ class PatientManager: ObservableObject {
 
             for (index, doc) in documents.enumerated() {
                 let data = doc.data()
-                let docID = doc.documentID
 
                 let firstName = data["firstName"] as? String ?? "Unknown"
                 let lastName = data["lastName"] as? String ?? "Unknown"
@@ -63,47 +59,44 @@ class PatientManager: ObservableObject {
 
                 var dressingStatus: DressingStatus = .good
                 var symptom: Symptom = .none
+                let patientKey = "\(firstName.lowercased())_\(lastName.lowercased())"
 
-                db.collection("patients").document(docID)
+                db.collection("patients").document(patientKey)
                     .collection("photos")
                     .order(by: "time", descending: true)
                     .limit(to: 1)
                     .getDocuments { snap, err in
                         if let photoData = snap?.documents.first?.data() {
                             let statusRaw = (photoData["status"] as? String ?? "good").lowercased()
-
-                            // ✅ Handle both [String] and String for 'issue'
                             if let issueArray = photoData["issue"] as? [String], let firstIssue = issueArray.first {
                                 symptom = Symptom.fromRawFirestore(firstIssue)
                             } else if let issueString = photoData["issue"] as? String {
                                 symptom = Symptom.fromRawFirestore(issueString)
-                            } else {
-                                symptom = .none
                             }
-
                             dressingStatus = DressingStatus.fromRawFirestore(statusRaw)
                         }
 
-                        let patient = Patient(
-                            id: index,
-                            firstName: firstName,
-                            lastName: lastName,
-                            location: location,
-                            status: patientStatus(dressingStatus: dressingStatus, symptom: symptom),
-                            description: "Loaded from Firestore",
-                            profileImageURL: profileImageURL,
-                            injuryPhotos: [],
-                            notes: self.loadNotesFromUserDefaults(for: index)
-                        )
+                        self.loadNotesFromFirestore(for: patientKey) { notes in
+                            let patient = Patient(
+                                id: index,
+                                firstName: firstName,
+                                lastName: lastName,
+                                location: location,
+                                status: patientStatus(dressingStatus: dressingStatus, symptom: symptom),
+                                description: "Loaded from Firestore",
+                                profileImageURL: profileImageURL,
+                                injuryPhotos: [],
+                                notes: notes
+                            )
 
-                        DispatchQueue.main.async {
-                            updatedList.append(patient)
-
-                            if updatedList.count == documents.count {
-                                self.patientList = updatedList
-                                print("patientList updated with \(updatedList.count) patients")
-                                if let first = updatedList.first {
-                                    self.currentPatient = Binding(get: { first }, set: { _ in })
+                            DispatchQueue.main.async {
+                                updatedList.append(patient)
+                                if updatedList.count == documents.count {
+                                    self.patientList = updatedList
+                                    print("✅ patientList updated with \(updatedList.count) patients")
+                                    if let first = updatedList.first {
+                                        self.currentPatient = Binding(get: { first }, set: { _ in })
+                                    }
                                 }
                             }
                         }
@@ -112,37 +105,61 @@ class PatientManager: ObservableObject {
         }
     }
 
-    func saveNotesToUserDefaults(for patient: Patient) {
-        let key = "notes_\(patient.id)"
-        if let encoded = try? JSONEncoder().encode(patient.notes) {
-            UserDefaults.standard.set(encoded, forKey: key)
-        }
+    func recordNotes(for patient: Patient, noteText: String) {
+        let db = Firestore.firestore()
+        let timestamp = Timestamp(date: Date())
+        let patientKey = "\(patient.firstName.lowercased())_\(patient.lastName.lowercased())"
+
+        let noteData: [String: Any] = [
+            "text": noteText,
+            "timestamp": timestamp
+        ]
+
+        db.collection("patients")
+          .document(patientKey)
+          .collection("notes")
+          .document("\(timestamp.dateValue().timeIntervalSince1970)")
+          .setData(noteData) { error in
+              if let error = error {
+                  print("Failed to save note: \(error)")
+              } else {
+                  print("Note saved for patient: \(patientKey)")
+              }
+          }
     }
 
-    func loadNotesFromUserDefaults(for patientID: Int) -> [Note] {
-        let key = "notes_\(patientID)"
-        if let data = UserDefaults.standard.data(forKey: key),
-           let decoded = try? JSONDecoder().decode([Note].self, from: data) {
-            return decoded
-        }
-        return []
-    }
+    func loadNotesFromFirestore(for patientKey: String, completion: @escaping ([Note]) -> Void) {
+        let db = Firestore.firestore()
+        db.collection("patients")
+            .document(patientKey)
+            .collection("notes")
+            .order(by: "timestamp", descending: false)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Failed to load notes: \(error)")
+                    completion([])
+                    return
+                }
 
-    func recordNotes(notes: String) {
-        let newNote = Note(text: notes, timestamp: Date())
+                guard let documents = snapshot?.documents else {
+                    completion([])
+                    return
+                }
 
-        if let currPatient = currentPatient {
-            if let index = patientList.firstIndex(where: { $0.id == currPatient.id }) {
-                patientList[index].notes.append(newNote)
+                let notes: [Note] = documents.compactMap { doc in
+                    let data = doc.data()
+                    guard let text = data["text"] as? String,
+                          let timestamp = data["timestamp"] as? Timestamp else {
+                        return nil
+                    }
+                    return Note(text: text, timestamp: timestamp.dateValue())
+                }
 
-                var updated = currPatient.wrappedValue
-                updated.notes.append(newNote)
-                currPatient.wrappedValue = updated
-
-                saveNotesToUserDefaults(for: updated)
+                completion(notes)
             }
-        }
     }
+
+
     private var refreshTimer: Timer?
 
     func startAutoRefresh(interval: TimeInterval = 10.0) {
@@ -156,5 +173,4 @@ class PatientManager: ObservableObject {
         refreshTimer?.invalidate()
         refreshTimer = nil
     }
-
 }

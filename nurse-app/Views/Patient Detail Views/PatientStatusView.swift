@@ -126,7 +126,7 @@ struct PatientStatusView: View {
             }
 
             if editingNotes {
-                EditingPopup(notesPopup: $editingNotes, nurseNotes: $nurseNotes)
+                EditingPopup(notesPopup: $editingNotes, nurseNotes: $nurseNotes, patient: $patient)
             }
         }
         .onAppear {
@@ -138,54 +138,53 @@ struct PatientStatusView: View {
 
 
 // Custom popup for textfields
-struct EditingPopup : View {
+struct EditingPopup: View {
     @EnvironmentObject var patientManager: PatientManager
     @Binding var notesPopup: Bool
     @Binding var nurseNotes: String
+    @Binding var patient: Patient
 
     var body: some View {
-        if let patient = patientManager.currentPatient {
-            if notesPopup {
-                ZStack {
-                    Color.black.opacity(0.4)
-                        .edgesIgnoringSafeArea(.all)
-                    VStack {
-                        Text("Enter your observations here.")
-                            .font(.headline)
-                            .padding()
-                        TextField("Start writing...", text: $nurseNotes)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding()
-                        HStack {
-                            Button("Cancel") {
+        if notesPopup {
+            ZStack {
+                Color.black.opacity(0.4).edgesIgnoringSafeArea(.all)
+                VStack {
+                    Text("Enter your observations here.")
+                        .font(.headline)
+                        .padding()
+                    TextField("Start writing...", text: $nurseNotes)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                    HStack {
+                        Button("Cancel") {
+                            notesPopup = false
+                        }
+                        .padding()
+
+                        Spacer()
+
+                        Button("Submit") {
+                            print("Before Submit: \(patient.description)")
+                            if !nurseNotes.isEmpty {
+                                patientManager.recordNotes(for: patient, noteText: nurseNotes)
                                 notesPopup = false
                             }
-                            .padding()
-
-                            Spacer()
-
-                            Button("Submit") {
-                                print("Before Submit: \(patient.description)")
-                                if !nurseNotes.isEmpty {
-                                    patientManager.recordNotes(notes: nurseNotes)
-                                    notesPopup = false
-                                    print("After Submit: \(patient.description)")
-                                }
-                                nurseNotes = ""
-                            }
-                            .padding()
+                            nurseNotes = ""
                         }
+                        .padding()
                     }
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(12)
-                    .shadow(radius: 10)
-                    .frame(maxWidth: 300)
                 }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(12)
+                .shadow(radius: 10)
+                .frame(maxWidth: 300)
             }
         }
     }
 }
+
+
 
 //#Preview {
 //    PatientStatusView(patient: SampleData.samplePatientBinding[0])
