@@ -53,7 +53,12 @@ struct ContentView: View {
         }
         .onAppear {
             patientManager.loadPatientsFromFirestore()
+            patientManager.startAutoRefresh()
         }
+        .onDisappear {
+            patientManager.stopAutoRefresh()
+        }
+
     }
 }
 

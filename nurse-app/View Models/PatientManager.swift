@@ -143,4 +143,18 @@ class PatientManager: ObservableObject {
             }
         }
     }
+    private var refreshTimer: Timer?
+
+    func startAutoRefresh(interval: TimeInterval = 10.0) {
+        refreshTimer?.invalidate()
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
+            self.loadPatientsFromFirestore()
+        }
+    }
+
+    func stopAutoRefresh() {
+        refreshTimer?.invalidate()
+        refreshTimer = nil
+    }
+
 }
