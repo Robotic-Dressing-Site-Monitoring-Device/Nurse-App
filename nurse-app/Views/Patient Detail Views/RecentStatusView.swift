@@ -57,9 +57,22 @@ struct RecentStatusView: View {
                                             Text("Status: \(DressingStatus.fromRawFirestore(photo.status).displayName)")
                                                 .foregroundColor(patientManager.colorForStatus(DressingStatus.fromRawFirestore(photo.status)))
 
-                                            Text("Symptom: \(Symptom.fromRawFirestore(photo.issue.first ?? "none").displayName)")
-                                                .font(.subheadline)
-                                                .foregroundColor(.black)
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text("Symptoms:")
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.black)
+
+                                                if photo.issue.isEmpty {
+                                                    Text("• None")
+                                                        .foregroundColor(.black)
+                                                } else {
+                                                    ForEach(photo.issue, id: \.self) { issue in
+                                                        Text("• \(Symptom.fromRawFirestore(issue).displayName)")
+                                                            .foregroundColor(.black)
+                                                    }
+                                                }
+                                            }
+
 
                                             Text("Taken on: \(patientManager.formattedDate(photo.time))")
                                                 .font(.caption)
