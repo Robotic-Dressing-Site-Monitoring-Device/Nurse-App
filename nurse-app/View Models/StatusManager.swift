@@ -61,7 +61,7 @@ class StatusManager: ObservableObject {
                             .document(safeTimestampID)
                             .setData([
                                 "imageURL": downloadURL.absoluteString,
-                                "issue": ["unknown"],  // ✅ 直接預設為陣列
+                                "issue": ["unknown"],
                                 "status": "pending",
                                 "analyzed": false,
                                 "time": Timestamp(date: timestamp),

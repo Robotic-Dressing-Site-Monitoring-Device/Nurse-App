@@ -77,13 +77,22 @@ struct PatientStatusView: View {
                         }
                         .padding(.vertical, 5)
 
-                        HStack{
-                            Text("Identified Issue: ")
+                        VStack(alignment: .leading) {
+                            Text("Identified Issues:")
                                 .font(.headline)
                                 .foregroundColor(.black)
-                            Text(latestRemoteStatus != nil ? Symptom.fromRawFirestore(latestRemoteStatus!.issue.first ?? "none").displayName : patientManager.descriptionForSymptom(patient.status.symptom))
-                                .foregroundColor(.black)
+
+                            if let latestPhoto = latestRemoteStatus {
+                                ForEach(latestPhoto.issue, id: \.self) { issue in
+                                    Text("• \(Symptom.fromRawFirestore(issue).displayName)")
+                                        .foregroundColor(.black)
+                                }
+                            } else {
+                                Text("• \(patientManager.descriptionForSymptom(patient.status.symptom))")
+                                    .foregroundColor(.black)
+                            }
                         }
+
 
                         HStack{
                             Text("Location: ")
