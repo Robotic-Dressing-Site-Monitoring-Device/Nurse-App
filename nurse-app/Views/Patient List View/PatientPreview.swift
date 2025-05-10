@@ -9,13 +9,28 @@ import SwiftUI
 
 struct PatientPreview: View {
     @EnvironmentObject var manager: PatientManager
-    @State var patient: Patient
+    @Binding var patient: Patient
     var body: some View {
-        Text("Patient \(patient.id) Preview")
+        VStack(alignment: .leading, spacing: 20) {
+            Text("Name: \(patient.firstName) \(patient.lastName)")
+                .font(.headline)
+                .foregroundColor(Color.ListText)
+
+            Text("Location: \(patient.location)")
+                .font(.subheadline)
+                .foregroundColor(Color.ListText)
+
+            Text("Patient ID: \(patient.id)")
+                .font(.subheadline)
+                .foregroundColor(Color.ListText)
+
+        }
+
+        
     }
 }
 
-#Preview {
-    PatientPreview(patient: Patient(id: 1, firstName: "john", lastName: "doe", location: "room 406"))
-        .environmentObject(PatientManager())
-}
+//#Preview {
+//    PatientPreview(patient: SampleData.samplePatientBinding[0])
+//        .environmentObject(PatientManager())
+//}

@@ -11,44 +11,45 @@ import SwiftUI
 
 struct PatientMenuView: View {
     @EnvironmentObject var manager: PatientManager
-    @State var patient: Patient
+    @Binding var patient: Patient
     var body: some View {
         NavigationStack {
             ZStack {
                 TabView {
-                    // View 1
-                    NavigationView {
-                        PatientHomeView(patient: patient)
-                    }
-                    .tabItem {
-                        Label("HomeView", systemImage: "house")
-                    }
-                    
-                    // View 2
-                    NavigationView {
-                        PatientStatusView()
-                    }
-                    .tabItem {
-                        Label("StatusView", systemImage: "star")
-                    }
-                    
-                    // View 3
-                    NavigationView {
-                        PatientSummaryView()
-                    }
-                    .tabItem {
-                        Label("SummaryView", systemImage: "pencil")
-                    }
-                    
-                    // ...
+                    PatientStatusView(patient: $patient)
+                        .tabItem {
+                            Label("StatusView", systemImage: "star")
+                        }
+                        .preferredColorScheme(.light)
+
+                    PatientHomeView(patient: $patient)
+                        .tabItem {
+                            Label("Home", systemImage: "house")
+                        }
+                        .toolbar {
+                            ToolbarItem(placement: .principal) {
+                                Text("\(patient.firstName) \(patient.lastName)'s Information")
+                                    .font(.headline)
+                            }
+                        }
+                        .preferredColorScheme(.light)
+
+
+                    PatientSummaryView(patient: $patient)
+                        .tabItem {
+                            Label("SummaryView", systemImage: "pencil")
+                        }
+                        .preferredColorScheme(.light)
                 }
+
+                .tint(Color.MenuButton)
             }
         }
         .ignoresSafeArea(.container, edges: .bottom)
     }
 }
 
-#Preview {
-    PatientMenuView(patient: Patient(id: 1, firstName: "john", lastName: "doe", location: "room 406"))
-        .environmentObject(PatientManager())
-}
+//#Preview {
+//    PatientMenuView(patient: SampleData.samplePatientBinding[0])
+//        .environmentObject(SampleData.sampleManager())
+//}

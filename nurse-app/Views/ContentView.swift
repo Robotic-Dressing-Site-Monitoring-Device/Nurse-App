@@ -15,23 +15,54 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var patientManager: PatientManager
+
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(patientManager.patientList) { patient in
-                    VStack {
-                        NavigationLink(destination: PatientMenuView(patient: patient)) {
-                            PatientPreview(patient: patient)
+            ZStack {
+                Color.white.ignoresSafeArea()
+
+                ScrollView {
+                    LazyVStack(spacing: 16) {
+                        ForEach(patientManager.patientList) { patient in
+                            NavigationLink(
+                                destination: PatientMenuView(patient: .constant(patient))
+                                    .onAppear {
+                                        patientManager.setPatient(patient: .constant(patient))
+                                    }
+                            ) {
+                                HStack(spacing: 0) {
+                                    Rectangle()
+                                        .fill(patientManager.colorForStatus(patient.status.dressingStatus))
+                                        .frame(width: 20)
+
+                                    PatientPreview(patient: .constant(patient))
+                                        .padding()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(Color.white)
+                                }
+                                .cornerRadius(12)
+                                .shadow(radius: 2)
+                            }
                         }
-                        
                     }
+                    .padding()
+                    .background(Color.white)
                 }
             }
+            .navigationTitle("Patient List")
         }
+        .onAppear {
+            patientManager.loadPatientsFromFirestore()
+            patientManager.startAutoRefresh()
+        }
+        .onDisappear {
+            patientManager.stopAutoRefresh()
+        }
+
     }
 }
 
-#Preview {
-    ContentView()
-        .environmentObject(PatientManager())
-}
+//#Preview {
+//    ContentView()
+//        .environmentObject(SampleData.sampleManager())
+//}
